@@ -630,41 +630,53 @@
         /* Top Bar Navigation */
         .top-bar {
           height: auto;
-          min-height: 50px;
-          padding: 8px 12px;
-          gap: 8px;
+          min-height: 52px;
+          padding: 8px 14px;
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
         }
 
         .brand {
-          font-size: 0.85rem;
+          font-size: 0.88rem;
           gap: 8px;
+          display: flex;
+          align-items: center;
         }
 
         .brand-badge {
-          font-size: 0.68rem;
-          padding: 3px 8px;
+          font-size: 0.72rem;
+          padding: 4px 8px;
           white-space: nowrap;
         }
 
         .brand-sub {
-          display: none;
+          display: inline;
+          font-size: 0.8rem;
+          color: var(--text-muted);
         }
 
         .controls {
-          gap: 6px;
-          flex-wrap: nowrap;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
         }
 
         .slide-select {
-          max-width: 130px;
-          font-size: 0.78rem;
-          padding: 5px 8px;
+          min-width: 170px;
+          max-width: 100%;
+          font-size: 0.82rem;
+          padding: 6px 10px;
         }
 
         .btn {
-          padding: 5px 9px;
-          font-size: 0.78rem;
-          gap: 4px;
+          padding: 6px 12px;
+          font-size: 0.8rem;
+          gap: 6px;
+          white-space: nowrap;
         }
 
         /* Slide Viewport */
@@ -837,27 +849,46 @@
       /* Compact Phones (<= 540px) */
       @media (max-width: 540px) {
         .top-bar {
-          padding: 6px 10px;
-          min-height: 46px;
+          padding: 8px 10px;
+          gap: 8px;
         }
 
-        .btn-text {
-          display: none;
+        .brand {
+          width: 100%;
+          justify-content: flex-start;
         }
 
-        .print-btn {
-          display: none;
+        .controls {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          padding-bottom: 4px;
         }
 
-        .btn {
-          padding: 5px 8px;
-          font-size: 0.84rem;
+        .controls::-webkit-scrollbar {
+          height: 3px;
+        }
+        .controls::-webkit-scrollbar-thumb {
+          background: var(--border-color);
+          border-radius: 3px;
         }
 
         .slide-select {
-          max-width: 110px;
-          font-size: 0.75rem;
-          padding: 5px 6px;
+          min-width: 160px;
+          flex-shrink: 0;
+          font-size: 0.8rem;
+          padding: 6px 8px;
+        }
+
+        .btn {
+          padding: 6px 10px;
+          font-size: 0.78rem;
+          flex-shrink: 0;
+          white-space: nowrap;
+          gap: 5px;
         }
 
         .slide-title {
