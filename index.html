@@ -1,8 +1,8 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Enterprise VA/PT & Vulnerability Lifecycle Platform</title>
     <style>
       :root[data-theme="dark"] {
@@ -67,10 +67,13 @@
         color: var(--text-primary);
         overflow: hidden;
         height: 100vh;
+        height: 100dvh;
         width: 100vw;
+        max-width: 100%;
         display: flex;
         flex-direction: column;
         user-select: none;
+        -webkit-text-size-adjust: 100%;
         transition:
           background-color 0.3s ease,
           color 0.3s ease;
@@ -569,6 +572,307 @@
         transition: width 0.25s ease;
       }
 
+      /* Custom Scrollbars */
+      .slide::-webkit-scrollbar,
+      .terminal::-webkit-scrollbar,
+      .notes-drawer::-webkit-scrollbar,
+      .diagram-container::-webkit-scrollbar,
+      table::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      .slide::-webkit-scrollbar-track,
+      .terminal::-webkit-scrollbar-track,
+      .notes-drawer::-webkit-scrollbar-track,
+      .diagram-container::-webkit-scrollbar-track,
+      table::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .slide::-webkit-scrollbar-thumb,
+      .terminal::-webkit-scrollbar-thumb,
+      .notes-drawer::-webkit-scrollbar-thumb,
+      .diagram-container::-webkit-scrollbar-thumb,
+      table::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 4px;
+      }
+      .slide::-webkit-scrollbar-thumb:hover,
+      .terminal::-webkit-scrollbar-thumb:hover,
+      .notes-drawer::-webkit-scrollbar-thumb:hover,
+      .diagram-container::-webkit-scrollbar-thumb:hover,
+      table::-webkit-scrollbar-thumb:hover {
+        background: var(--accent-cyan);
+      }
+
+      /* Tablet & Small Laptop (<= 1024px) */
+      @media (max-width: 1024px) {
+        .top-bar {
+          padding: 0 16px;
+        }
+        .slide {
+          width: 96%;
+          height: 94%;
+          padding: 16px 18px;
+        }
+        .grid-3 {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .grid-4 {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .member-grid {
+          grid-template-columns: repeat(2, 1fr) !important;
+        }
+      }
+
+      /* Mobile & Small Tablet (<= 768px) */
+      @media (max-width: 768px) {
+        /* Top Bar Navigation */
+        .top-bar {
+          height: auto;
+          min-height: 50px;
+          padding: 8px 12px;
+          gap: 8px;
+        }
+
+        .brand {
+          font-size: 0.85rem;
+          gap: 8px;
+        }
+
+        .brand-badge {
+          font-size: 0.68rem;
+          padding: 3px 8px;
+          white-space: nowrap;
+        }
+
+        .brand-sub {
+          display: none;
+        }
+
+        .controls {
+          gap: 6px;
+          flex-wrap: nowrap;
+        }
+
+        .slide-select {
+          max-width: 130px;
+          font-size: 0.78rem;
+          padding: 5px 8px;
+        }
+
+        .btn {
+          padding: 5px 9px;
+          font-size: 0.78rem;
+          gap: 4px;
+        }
+
+        /* Slide Viewport */
+        .viewport {
+          padding: 8px 6px;
+          align-items: stretch;
+        }
+
+        .slide {
+          width: 100% !important;
+          max-width: 100% !important;
+          height: 100% !important;
+          padding: 14px 12px !important;
+          border-radius: 10px;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        /* Slide Header & Titles */
+        .slide-header {
+          margin-bottom: 12px !important;
+          padding-bottom: 8px !important;
+        }
+
+        .slide-kicker {
+          font-size: 0.72rem !important;
+          letter-spacing: 1px;
+        }
+
+        .slide-title {
+          font-size: 1.32rem !important;
+          line-height: 1.3 !important;
+          margin-bottom: 6px !important;
+        }
+
+        .slide-subtitle {
+          font-size: 0.86rem !important;
+          line-height: 1.45 !important;
+        }
+
+        /* Grid Layouts to 1 column */
+        .grid-2,
+        .grid-3,
+        .grid-4,
+        .diff-container,
+        .member-grid {
+          grid-template-columns: 1fr !important;
+          gap: 12px !important;
+        }
+
+        .member-card {
+          padding: 12px 14px !important;
+          gap: 12px !important;
+        }
+
+        .member-avatar {
+          width: 42px !important;
+          height: 42px !important;
+          font-size: 1rem !important;
+        }
+
+        .member-info h4 {
+          font-size: 0.95rem !important;
+        }
+
+        /* Cards */
+        .card {
+          padding: 14px;
+          gap: 8px;
+          border-radius: 10px;
+        }
+
+        .card-title {
+          font-size: 0.98rem;
+        }
+
+        .card p,
+        .card li {
+          font-size: 0.86rem;
+          line-height: 1.5;
+        }
+
+        .card ul {
+          padding-left: 16px;
+          gap: 4px;
+        }
+
+        .diff-box {
+          padding: 12px;
+        }
+
+        .narrative-block {
+          padding: 12px;
+          margin-bottom: 10px;
+          gap: 6px;
+        }
+
+        .narrative-label {
+          font-size: 0.72rem;
+        }
+
+        /* Tables - Horizontal Touch Scroll */
+        table {
+          display: block;
+          width: 100%;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          border-radius: 8px;
+          margin: 8px 0;
+        }
+
+        th {
+          padding: 8px 10px;
+          font-size: 0.78rem;
+          min-width: 100px;
+          white-space: nowrap;
+        }
+
+        td {
+          padding: 8px 10px;
+          font-size: 0.82rem;
+          min-width: 110px;
+          line-height: 1.45;
+        }
+
+        /* Diagrams - Horizontal Touch Scroll */
+        .diagram-container {
+          padding: 10px 8px;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          justify-content: flex-start;
+          border-radius: 10px;
+        }
+
+        .diagram-container svg {
+          min-width: 580px;
+          height: auto;
+        }
+
+        /* Terminal & Code */
+        .terminal {
+          padding: 10px 12px;
+          font-size: 0.76rem;
+          line-height: 1.45;
+          border-radius: 6px;
+        }
+
+        /* Speaker Notes Drawer */
+        .notes-drawer {
+          padding: 10px 16px;
+          max-height: 130px;
+        }
+
+        .notes-content {
+          font-size: 0.84rem;
+        }
+
+        /* Bottom Bar */
+        .bottom-bar {
+          height: 38px;
+          padding: 0 14px;
+          font-size: 0.75rem;
+          justify-content: center;
+        }
+
+        .desktop-shortcuts {
+          display: none;
+        }
+      }
+
+      /* Compact Phones (<= 540px) */
+      @media (max-width: 540px) {
+        .top-bar {
+          padding: 6px 10px;
+          min-height: 46px;
+        }
+
+        .btn-text {
+          display: none;
+        }
+
+        .print-btn {
+          display: none;
+        }
+
+        .btn {
+          padding: 5px 8px;
+          font-size: 0.84rem;
+        }
+
+        .slide-select {
+          max-width: 110px;
+          font-size: 0.75rem;
+          padding: 5px 6px;
+        }
+
+        .slide-title {
+          font-size: 1.18rem !important;
+        }
+
+        .slide {
+          padding: 12px 10px !important;
+        }
+
+        .card {
+          padding: 12px;
+        }
+      }
+
       @media print {
         body {
           overflow: visible;
@@ -600,7 +904,7 @@
     <header class="top-bar">
       <div class="brand">
         <span class="brand-badge">Full-Lifecycle VA/PT Platform</span>
-        <span>Greenbone OpenVAS &times; OWASP DefectDojo v3.4.101</span>
+        <span class="brand-sub">Greenbone OpenVAS &times; OWASP DefectDojo v3.4.101</span>
       </div>
 
       <div class="controls">
@@ -610,22 +914,22 @@
           aria-label="Select slide to navigate"
         ></select>
         <button class="btn" id="prevBtn" title="Previous Slide">
-          &#8592; Prev
+          &#8592;<span class="btn-text"> Prev</span>
         </button>
         <button class="btn" id="nextBtn" title="Next Slide">
-          Next &#8594;
+          <span class="btn-text">Next </span>&#8594;
         </button>
         <button class="btn" id="themeToggleBtn" title="Toggle Light/Dark Theme">
-          &#9728; Theme
+          &#9728;<span class="btn-text"> Theme</span>
         </button>
         <button class="btn" id="notesBtn" title="Toggle Speaker Notes">
-          &#128221; Notes (S)
+          &#128221;<span class="btn-text"> Notes</span>
         </button>
         <button class="btn" id="fullscreenBtn" title="Toggle Fullscreen">
-          &#9974; Full (F)
+          &#9974;<span class="btn-text"> Full</span>
         </button>
-        <button class="btn" onclick="window.print()" title="Print to PDF">
-          &#128424; Export PDF
+        <button class="btn print-btn" onclick="window.print()" title="Print to PDF">
+          &#128424;<span class="btn-text"> Export PDF</span>
         </button>
       </div>
     </header>
@@ -3356,7 +3660,7 @@
       <div class="progress-track">
         <div id="progressFill" class="progress-fill"></div>
       </div>
-      <div>
+      <div class="desktop-shortcuts">
         Use <strong>&larr; / &rarr; / Spacebar</strong> to navigate &bull; Press
         <strong>S</strong> for Speaker Notes &bull; Press <strong>F</strong> for
         Fullscreen
@@ -3398,7 +3702,11 @@
         currentIndex = index;
 
         slides.forEach((s, i) => {
-          s.classList.toggle("active", i === currentIndex);
+          const isActive = i === currentIndex;
+          s.classList.toggle("active", isActive);
+          if (isActive) {
+            s.scrollTop = 0;
+          }
         });
 
         slideSelect.value = currentIndex;
@@ -3421,7 +3729,9 @@
         const newTheme = currentTheme === "dark" ? "light" : "dark";
         document.documentElement.setAttribute("data-theme", newTheme);
         themeToggleBtn.innerHTML =
-          newTheme === "dark" ? "&#9728; Theme" : "&#9790; Theme";
+          newTheme === "dark"
+            ? '&#9728;<span class="btn-text"> Theme</span>'
+            : '&#9790;<span class="btn-text"> Theme</span>';
       }
 
       function toggleFullscreen() {
@@ -3467,6 +3777,48 @@
           toggleTheme();
         }
       });
+
+      // Touch Swipe Support for Mobile & Tablet
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchEndX = 0;
+      let touchEndY = 0;
+
+      document.addEventListener(
+        "touchstart",
+        (e) => {
+          if (e.changedTouches && e.changedTouches[0]) {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+          }
+        },
+        { passive: true },
+      );
+
+      document.addEventListener(
+        "touchend",
+        (e) => {
+          if (e.changedTouches && e.changedTouches[0]) {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipeGesture();
+          }
+        },
+        { passive: true },
+      );
+
+      function handleSwipeGesture() {
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+        // Trigger if horizontal movement is at least 45px and dominant over vertical scroll
+        if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4) {
+          if (deltaX < 0) {
+            updateSlide(currentIndex + 1);
+          } else {
+            updateSlide(currentIndex - 1);
+          }
+        }
+      }
 
       updateSlide(0);
     </script>
