@@ -385,6 +385,18 @@
         height: auto;
       }
 
+      .diagram-scroll-hint {
+        display: none;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.76rem;
+        font-weight: 700;
+        color: var(--accent-cyan);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+
       /* Member Badge List */
       .member-grid {
         display: grid;
@@ -802,17 +814,27 @@
         }
 
         /* Diagrams - Horizontal Touch Scroll */
+        .diagram-scroll-hint {
+          display: flex;
+        }
+
         .diagram-container {
-          padding: 10px 8px;
+          padding: 12px 14px;
           overflow-x: auto;
           -webkit-overflow-scrolling: touch;
           justify-content: flex-start;
-          border-radius: 10px;
+          border-radius: 12px;
+          border: 1px solid rgba(6, 182, 212, 0.4);
+          background: var(--bg-card);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+          margin-bottom: 14px;
         }
 
         .diagram-container svg {
-          min-width: 580px;
-          height: auto;
+          width: 980px;
+          min-width: 980px;
+          height: 315px;
+          display: block;
         }
 
         /* Terminal & Code */
@@ -1696,6 +1718,9 @@
         </div>
 
         <!-- Architectural SVG Diagram -->
+        <div class="diagram-scroll-hint">
+          <span>&#8596; Swipe horizontally to explore full system architecture</span>
+        </div>
         <div class="diagram-container">
           <svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg">
             <!-- Background Box Kali Host -->
