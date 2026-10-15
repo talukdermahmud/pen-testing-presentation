@@ -3854,6 +3854,7 @@
       let touchStartY = 0;
       let touchEndX = 0;
       let touchEndY = 0;
+      let touchTarget = null;
 
       document.addEventListener(
         "touchstart",
@@ -3861,6 +3862,7 @@
           if (e.changedTouches && e.changedTouches[0]) {
             touchStartX = e.changedTouches[0].screenX;
             touchStartY = e.changedTouches[0].screenY;
+            touchTarget = e.target;
           }
         },
         { passive: true },
@@ -3872,6 +3874,21 @@
           if (e.changedTouches && e.changedTouches[0]) {
             touchEndX = e.changedTouches[0].screenX;
             touchEndY = e.changedTouches[0].screenY;
+
+            // Never switch slides if touch originated inside horizontally scrollable widgets:
+            // architecture diagrams, tables, terminal code blocks, or top bar controls
+            if (
+              touchTarget &&
+              (touchTarget.closest(".diagram-container") ||
+                touchTarget.closest("table") ||
+                touchTarget.closest(".terminal") ||
+                touchTarget.closest(".controls") ||
+                touchTarget.closest("select") ||
+                touchTarget.closest("button"))
+            ) {
+              return;
+            }
+
             handleSwipeGesture();
           }
         },
