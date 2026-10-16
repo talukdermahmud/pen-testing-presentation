@@ -2962,7 +2962,7 @@
       <section
         class="slide"
         data-title="11. Anticipated Committee Questions"
-        data-notes="Honorable committee members, before opening the floor, we have identified the four most critical architectural, operational, and data-consistency questions that arise when evaluating this platform. We present these four core inquiry areas here."
+        data-notes="Honorable committee members, we have identified the four most critical architectural, operational, and data-consistency inquiries that arise when evaluating this platform: sensor vs. management plane, feed mutex locking, asset taxonomy in DefectDojo v3.4.101, and cryptographic deduplication."
       >
         <div class="slide-header">
           <div class="slide-kicker">&#128172; Technical Evaluation Inquiry</div>
@@ -2970,143 +2970,74 @@
             Anticipated Committee Evaluation Questions
           </h2>
           <p class="slide-subtitle">
-            Key architectural, operational, and data integrity challenges
-            addressed in this research
+            Core architectural, operational, and data integrity inquiries addressed in this defense
           </p>
         </div>
 
-        <div class="grid-2">
+        <div class="grid-2" style="margin-top: 10px; gap: 18px;">
           <!-- Question 1 -->
-          <div class="card highlight-cyan" style="padding: 24px">
-            <div class="card-title" style="font-size: 1.38rem">
-              &#10067; Question 1: Sensor vs. Management Plane
+          <div class="card highlight-cyan" style="padding: 20px 22px; display: flex; flex-direction: column; gap: 10px;">
+            <div class="card-title" style="font-size: 1.2rem; display: flex; align-items: center; justify-content: space-between;">
+              <span>&#10067; Question 1: Architecture Plane</span>
+              <span style="font-size: 0.74rem; font-weight: 800; background: rgba(2, 132, 199, 0.15); color: var(--accent-cyan); padding: 3px 8px; border-radius: 4px;">
+                SENSOR VS. ASPM
+              </span>
             </div>
-            <div
-              style="
-                font-size: 1.28rem;
-                font-weight: 700;
-                color: var(--text-primary);
-                margin: 10px 0 8px;
-                line-height: 1.5;
-              "
-            >
-              Why not just read reports inside OpenVAS? Why is OWASP DefectDojo
-              mandatory in an enterprise architecture?
+            <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); line-height: 1.45;">
+              Why is OWASP DefectDojo mandatory instead of relying solely on OpenVAS scanner reports?
             </div>
-            <p
-              style="
-                font-size: 1.18rem;
-                color: var(--text-muted);
-                line-height: 1.68;
-              "
-            >
-              <strong>Inquiry Focus:</strong> Limitations of raw network
-              scanning sensors vs. closed-loop DevSecOps lifecycle governance,
-              deduplication, and SLA accountability.
-            </p>
+            <div style="font-size: 0.9rem; color: var(--accent-cyan); font-weight: 600; margin-top: auto; padding-top: 6px;">
+              &#127919; <strong>Key Focus:</strong> Sensor telemetry limitations vs. enterprise SLA governance and ticket lifecycle.
+            </div>
           </div>
 
           <!-- Question 2 -->
-          <div class="card highlight-amber" style="padding: 24px">
-            <div class="card-title" style="font-size: 1.38rem">
-              &#10067; Question 2: Feed Locks &amp; Scan Integrity
+          <div class="card highlight-amber" style="padding: 20px 22px; display: flex; flex-direction: column; gap: 10px;">
+            <div class="card-title" style="font-size: 1.2rem; display: flex; align-items: center; justify-content: space-between;">
+              <span>&#10067; Question 2: Database Integrity</span>
+              <span style="font-size: 0.74rem; font-weight: 800; background: rgba(217, 119, 6, 0.15); color: var(--accent-amber); padding: 3px 8px; border-radius: 4px;">
+                MUTEX LOCKING
+              </span>
             </div>
-            <div
-              style="
-                font-size: 1.28rem;
-                font-weight: 700;
-                color: var(--text-primary);
-                margin: 10px 0 8px;
-                line-height: 1.5;
-              "
-            >
-              Why does OpenVAS lock the feed and block scan creation during
-              background synchronization?
+            <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); line-height: 1.45;">
+              Why does OpenVAS lock the feed database and block scan creation during background synchronization?
             </div>
-            <p
-              style="
-                font-size: 1.18rem;
-                color: var(--text-muted);
-                line-height: 1.68;
-              "
-            >
-              <strong>Inquiry Focus:</strong> PostgreSQL relational schema
-              consistency, mutex lock contention
-              (<code>feed-update.lock</code>), and preventing false negatives.
-            </p>
+            <div style="font-size: 0.9rem; color: var(--accent-amber); font-weight: 600; margin-top: auto; padding-top: 6px;">
+              &#127919; <strong>Key Focus:</strong> PostgreSQL schema consistency and preventing false negatives during feed writes.
+            </div>
           </div>
 
           <!-- Question 3 -->
-          <div class="card highlight-green" style="padding: 24px">
-            <div class="card-title" style="font-size: 1.38rem">
-              &#10067; Question 3: ASPM Asset Taxonomy in v3.4.101
+          <div class="card highlight-green" style="padding: 20px 22px; display: flex; flex-direction: column; gap: 10px;">
+            <div class="card-title" style="font-size: 1.2rem; display: flex; align-items: center; justify-content: space-between;">
+              <span>&#10067; Question 3: Asset Taxonomy</span>
+              <span style="font-size: 0.74rem; font-weight: 800; background: rgba(16, 185, 129, 0.15); color: var(--accent-green); padding: 3px 8px; border-radius: 4px;">
+                DEFECTDOJO v3.4.101
+              </span>
             </div>
-            <div
-              style="
-                font-size: 1.28rem;
-                font-weight: 700;
-                color: var(--text-primary);
-                margin: 10px 0 8px;
-                line-height: 1.5;
-              "
-            >
-              How does the new DefectDojo v3.4.101 'Organization &rarr; Asset'
-              model improve security operations over legacy product models?
+            <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); line-height: 1.45;">
+              How does the new 'Organization &rarr; Asset' hierarchy improve on legacy software product models?
             </div>
-            <p
-              style="
-                font-size: 1.18rem;
-                color: var(--text-muted);
-                line-height: 1.68;
-              "
-            >
-              <strong>Inquiry Focus:</strong> Transitioning from software
-              repository "Products" to comprehensive infrastructure host
-              ("Assets") governance.
-            </p>
+            <div style="font-size: 0.9rem; color: var(--accent-green); font-weight: 600; margin-top: auto; padding-top: 6px;">
+              &#127919; <strong>Key Focus:</strong> Native infrastructure host modeling vs. software code repository tracking.
+            </div>
           </div>
 
           <!-- Question 4 -->
-          <div class="card highlight-purple" style="padding: 24px">
-            <div class="card-title" style="font-size: 1.38rem">
-              &#10067; Question 4: Cryptographic Deduplication &amp; Retests
+          <div class="card highlight-purple" style="padding: 20px 22px; display: flex; flex-direction: column; gap: 10px;">
+            <div class="card-title" style="font-size: 1.2rem; display: flex; align-items: center; justify-content: space-between;">
+              <span>&#10067; Question 4: Deduplication &amp; Retests</span>
+              <span style="font-size: 0.74rem; font-weight: 800; background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); padding: 3px 8px; border-radius: 4px;">
+                SHA-256 LOGIC
+              </span>
             </div>
-            <div
-              style="
-                font-size: 1.28rem;
-                font-weight: 700;
-                color: var(--text-primary);
-                margin: 10px 0 8px;
-                line-height: 1.5;
-              "
-            >
-              How does DefectDojo prevent duplicate findings during recurring
-              scans, and how does the auto-mitigation verification loop work?
+            <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); line-height: 1.45;">
+              How does DefectDojo eliminate duplicate tickets across scans and automatically verify fixes?
             </div>
-            <p
-              style="
-                font-size: 1.18rem;
-                color: var(--text-muted);
-                line-height: 1.68;
-              "
-            >
-              <strong>Inquiry Focus:</strong> Deterministic SHA-256
-              fingerprinting, noise elimination, and automated closed-loop
-              remediation verification.
-            </p>
+            <div style="font-size: 0.9rem; color: var(--accent-purple); font-weight: 600; margin-top: auto; padding-top: 6px;">
+              &#127919; <strong>Key Focus:</strong> Deterministic fingerprint hashing and closed-loop retest mitigation.
+            </div>
           </div>
-        </div>
-
-        <div
-          class="narrative-block"
-          style="border-left: 4px solid var(--accent-cyan); margin-top: 14px"
-        >
-          <span class="narrative-label">&#128065; Committee Review Focus</span>
-          <p>
-            These four questions represent the core technical and operational
-            pillars of our platform. The following slide provides our rigorous,
-            evidence-backed engineering answers to each inquiry.
-          </p>
         </div>
       </section>
 
@@ -3124,104 +3055,78 @@
             Authoritative Answers to Committee Questions
           </h2>
           <p class="slide-subtitle">
-            Rigorous architectural, empirical, and database evidence resolving
-            each evaluation inquiry
+            Rigorous architectural, empirical, and database evidence resolving each evaluation inquiry
           </p>
         </div>
 
-        <div class="grid-2">
+        <div class="grid-2" style="margin-top: 10px; gap: 18px;">
           <!-- Answer 1 -->
-          <div class="card highlight-cyan">
-            <div class="card-title">
-              &#9989; Answer 1: Sensor vs. Management Plane
+          <div class="card highlight-cyan" style="padding: 20px 22px; display: flex; flex-direction: column; gap: 10px;">
+            <div class="card-title" style="font-size: 1.2rem; display: flex; align-items: center; justify-content: space-between;">
+              <span>&#9989; Answer 1: Sensor vs. Management Plane</span>
+              <span style="font-size: 0.74rem; font-weight: 800; background: rgba(2, 132, 199, 0.15); color: var(--accent-cyan); padding: 3px 8px; border-radius: 4px;">
+                GOVERNANCE
+              </span>
             </div>
-            <p>
-              <strong>OpenVAS is merely an assessment sensor</strong>; it has
-              zero concept of enterprise workflow, SLAs, or ticket lifecycles.
-              It cannot deduplicate findings across recurring scans, cannot
-              track which developer resolved a flaw, has no SLA timers, and
-              cannot correlate network findings with web or code findings.
-            </p>
-            <p>
-              <strong>The Solution:</strong> DefectDojo provides the unified
-              management, governance, and verification plane, converting dead
-              XML artifacts into actionable, SLA-tracked engineering tickets.
-            </p>
+            <ul style="display: flex; flex-direction: column; gap: 8px; padding-left: 18px; margin: 0; font-size: 1.02rem; line-height: 1.5;">
+              <li><strong>Sensor Limitation:</strong> OpenVAS scans ports and outputs XML, but lacks SLAs, ownership, or remediation lifecycles.</li>
+              <li><strong>ASPM Solution:</strong> DefectDojo transforms raw findings into tracked engineering tickets with automated SLA timers.</li>
+            </ul>
+            <div style="font-size: 0.9rem; color: var(--accent-cyan); font-weight: 700; margin-top: auto; padding-top: 6px; border-top: 1px dashed var(--border-color);">
+              &#128073; <strong>Takeaway:</strong> OpenVAS discovers; DefectDojo governs and enforces remediation.
+            </div>
           </div>
 
           <!-- Answer 2 -->
-          <div class="card highlight-amber">
-            <div class="card-title">
-              &#9989; Answer 2: Relational Consistency &amp; Mutex Locks
+          <div class="card highlight-amber" style="padding: 20px 22px; display: flex; flex-direction: column; gap: 10px;">
+            <div class="card-title" style="font-size: 1.2rem; display: flex; align-items: center; justify-content: space-between;">
+              <span>&#9989; Answer 2: Relational Consistency &amp; Locks</span>
+              <span style="font-size: 0.74rem; font-weight: 800; background: rgba(217, 119, 6, 0.15); color: var(--accent-amber); padding: 3px 8px; border-radius: 4px;">
+                INTEGRITY
+              </span>
             </div>
-            <p>
-              <strong
-                >OpenVAS enforces strict relational consistency in
-                PostgreSQL.</strong
-              >
-              A Scan Task requires a Scan Config, and a Scan Config is an SQL
-              query over available NVTs.
-            </p>
-            <p>
-              If Greenbone permitted task creation while the feed was actively
-              writing, scans would execute with incomplete vulnerability
-              definitions, causing dangerous false negatives. Mutex locking
-              (<code>feed-update.lock</code>) guarantees data integrity.
-            </p>
+            <ul style="display: flex; flex-direction: column; gap: 8px; padding-left: 18px; margin: 0; font-size: 1.02rem; line-height: 1.5;">
+              <li><strong>Relational Requirement:</strong> Scan configs in PostgreSQL are SQL queries referencing complete NVT table records.</li>
+              <li><strong>Mutex Protection:</strong> <code>feed-update.lock</code> blocks concurrent scans to prevent incomplete signatures and false negatives.</li>
+            </ul>
+            <div style="font-size: 0.9rem; color: var(--accent-amber); font-weight: 700; margin-top: auto; padding-top: 6px; border-top: 1px dashed var(--border-color);">
+              &#128073; <strong>Takeaway:</strong> Feed locking guarantees 100% scan accuracy and database consistency.
+            </div>
           </div>
 
           <!-- Answer 3 -->
-          <div class="card highlight-green">
-            <div class="card-title">
-              &#9989; Answer 3: Unified 'Assets' Taxonomy (v3.4.101)
+          <div class="card highlight-green" style="padding: 20px 22px; display: flex; flex-direction: column; gap: 10px;">
+            <div class="card-title" style="font-size: 1.2rem; display: flex; align-items: center; justify-content: space-between;">
+              <span>&#9989; Answer 3: Unified 'Assets' Taxonomy</span>
+              <span style="font-size: 0.74rem; font-weight: 800; background: rgba(16, 185, 129, 0.15); color: var(--accent-green); padding: 3px 8px; border-radius: 4px;">
+                v3.4.101
+              </span>
             </div>
-            <p>
-              <strong
-                >Legacy models used 'Product Types' &amp; 'Products'</strong
-              >, designed solely for software code repositories.
-            </p>
-            <p>
-              Version 3.4.101 introduces the
-              <em>Organization &rarr; Asset</em> hierarchy. This allows
-              infrastructure servers (like <code>Target Lab Server</code> at
-              <code>10.0.2.15</code>), subnets, and cloud VPCs to be modeled
-              natively with technical owners, SLAs, and location reports.
-            </p>
+            <ul style="display: flex; flex-direction: column; gap: 8px; padding-left: 18px; margin: 0; font-size: 1.02rem; line-height: 1.5;">
+              <li><strong>Legacy Model:</strong> 'Product Types' &amp; 'Products' were designed strictly for software source repositories.</li>
+              <li><strong>ASPM Hierarchy:</strong> <em>Organization &rarr; Asset</em> natively maps physical/virtual hosts (<code>10.0.2.15</code>), subnets, and owners.</li>
+            </ul>
+            <div style="font-size: 0.9rem; color: var(--accent-green); font-weight: 700; margin-top: auto; padding-top: 6px; border-top: 1px dashed var(--border-color);">
+              &#128073; <strong>Takeaway:</strong> Enables enterprise host-level compliance and automated Location Reports.
+            </div>
           </div>
 
           <!-- Answer 4 -->
-          <div class="card highlight-purple">
-            <div class="card-title">
-              &#9989; Answer 4: Deterministic SHA-256 Deduplication
+          <div class="card highlight-purple" style="padding: 20px 22px; display: flex; flex-direction: column; gap: 10px;">
+            <div class="card-title" style="font-size: 1.2rem; display: flex; align-items: center; justify-content: space-between;">
+              <span>&#9989; Answer 4: Deterministic Deduplication</span>
+              <span style="font-size: 0.74rem; font-weight: 800; background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); padding: 3px 8px; border-radius: 4px;">
+                SHA-256
+              </span>
             </div>
-            <p>
-              <strong>DefectDojo computes a deterministic SHA-256 hash</strong>
-              over the finding title, CVE, endpoint IP, and port.
-            </p>
-            <p>
-              When a subsequent scan is imported, matching hashes increment
-              occurrence counters instead of creating duplicates. Missing
-              findings are automatically transitioned from
-              <code>Active</code> to <code>Mitigated</code> with historical
-              audit trails preserved.
-            </p>
+            <ul style="display: flex; flex-direction: column; gap: 8px; padding-left: 18px; margin: 0; font-size: 1.02rem; line-height: 1.5;">
+              <li><strong>Cryptographic Hash:</strong> SHA-256 generated from Title, CVE, Target Host, and Service Port.</li>
+              <li><strong>Automated Lifecycle:</strong> Matching hashes increment duplicate counters (+1); missing hashes auto-close to <code>Mitigated</code>.</li>
+            </ul>
+            <div style="font-size: 0.9rem; color: var(--accent-purple); font-weight: 700; margin-top: auto; padding-top: 6px; border-top: 1px dashed var(--border-color);">
+              &#128073; <strong>Takeaway:</strong> Eliminates duplicate ticket fatigue and provides audit-ready verification.
+            </div>
           </div>
-        </div>
-
-        <div
-          class="narrative-block"
-          style="border-left: 4px solid var(--accent-green); margin-top: 14px"
-        >
-          <span class="narrative-label"
-            >&#128203; Summary of Technical Architecture</span
-          >
-          <p>
-            By coupling native socket scanning with relational ASPM governance,
-            our platform bridges the critical gap between active vulnerability
-            discovery and verified remediation accountability—ensuring security
-            issues are tracked, mitigated, and verified with zero manual
-            spreadsheet overhead.
-          </p>
         </div>
       </section>
     </main>
