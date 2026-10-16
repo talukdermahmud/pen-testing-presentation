@@ -1,0 +1,3914 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Enterprise VA/PT & Vulnerability Lifecycle Platform</title>
+    <style>
+      :root[data-theme="dark"] {
+        --bg-primary: #0a0f1d;
+        --bg-secondary: #111827;
+        --bg-card: #1e293b;
+        --bg-card-hover: #283548;
+        --text-primary: #f8fafc;
+        --text-secondary: #cbd5e1;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --accent-cyan: #06b6d4;
+        --accent-blue: #3b82f6;
+        --accent-green: #10b981;
+        --accent-amber: #f59e0b;
+        --accent-red: #ef4444;
+        --accent-purple: #8b5cf6;
+        --code-bg: #030712;
+        --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        --header-bg: rgba(17, 24, 39, 0.95);
+        --diff-del-bg: rgba(239, 68, 68, 0.15);
+        --diff-del-border: #ef4444;
+        --diff-add-bg: rgba(16, 185, 129, 0.15);
+        --diff-add-border: #10b981;
+      }
+
+      :root[data-theme="light"] {
+        --bg-primary: #f8fafc;
+        --bg-secondary: #ffffff;
+        --bg-card: #ffffff;
+        --bg-card-hover: #f1f5f9;
+        --text-primary: #0f172a;
+        --text-secondary: #334155;
+        --text-muted: #64748b;
+        --border-color: #e2e8f0;
+        --accent-cyan: #0284c7;
+        --accent-blue: #2563eb;
+        --accent-green: #059669;
+        --accent-amber: #d97706;
+        --accent-red: #dc2626;
+        --accent-purple: #7c3aed;
+        --code-bg: #1e293b;
+        --card-shadow: 0 8px 24px rgba(148, 163, 184, 0.2);
+        --header-bg: rgba(255, 255, 255, 0.95);
+        --diff-del-bg: #fee2e2;
+        --diff-del-border: #dc2626;
+        --diff-add-bg: #dcfce7;
+        --diff-add-border: #059669;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        overflow: hidden;
+        height: 100vh;
+        height: 100dvh;
+        width: 100vw;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        user-select: none;
+        -webkit-text-size-adjust: 100%;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      /* Header Controls */
+      .top-bar {
+        height: 56px;
+        background: var(--header-bg);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+        z-index: 50;
+        flex-shrink: 0;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 800;
+        font-size: 1rem;
+        color: var(--text-primary);
+      }
+
+      .brand-badge {
+        background: linear-gradient(
+          135deg,
+          var(--accent-cyan),
+          var(--accent-blue)
+        );
+        color: #ffffff;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.72rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn {
+        background: var(--bg-card);
+        color: var(--text-secondary);
+        border: 1px solid var(--border-color);
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .btn:hover {
+        background: var(--bg-card-hover);
+        color: var(--accent-cyan);
+        border-color: var(--accent-cyan);
+      }
+
+      .btn.active {
+        background: rgba(6, 182, 212, 0.15);
+        color: var(--accent-cyan);
+        border-color: var(--accent-cyan);
+      }
+
+      .slide-select {
+        background: var(--bg-card);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+        padding: 7px 12px;
+        border-radius: 8px;
+        font-size: 0.84rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      /* Viewport and Slide Containers */
+      .viewport {
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+
+        .slide {
+    position: absolute;
+    width: 95%;
+    max-width: 1440px;
+    height: 92%;
+    opacity: 0;
+    transform: translateY(20px) scale(0.985);
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 18px 24px;
+    user-select: text;
+  }
+
+      .slide.active {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+      }
+
+      /* Typography & Headers */
+      .slide-header {
+        margin-bottom: 18px;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 12px;
+      }
+
+      .slide-kicker {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--accent-cyan);
+        font-weight: 800;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .slide-title {
+        font-size: 1.95rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        line-height: 1.2;
+      }
+
+      .slide-subtitle {
+        font-size: 0.98rem;
+        color: var(--text-muted);
+        margin-top: 4px;
+      }
+
+      /* Grid Layouts */
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        flex: 1;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        flex: 1;
+      }
+
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+      }
+
+      /* Custom Cards */
+      .card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        box-shadow: var(--card-shadow);
+      }
+
+      .card.highlight-cyan {
+        border-top: 4px solid var(--accent-cyan);
+      }
+      .card.highlight-blue {
+        border-top: 4px solid var(--accent-blue);
+      }
+      .card.highlight-green {
+        border-top: 4px solid var(--accent-green);
+      }
+      .card.highlight-amber {
+        border-top: 4px solid var(--accent-amber);
+      }
+      .card.highlight-red {
+        border-top: 4px solid var(--accent-red);
+      }
+      .card.highlight-purple {
+        border-top: 4px solid var(--accent-purple);
+      }
+
+      .card-title {
+        font-size: 1.08rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .card p,
+      .card li {
+        font-size: 0.92rem;
+        line-height: 1.55;
+        color: var(--text-secondary);
+      }
+
+      .card ul {
+        padding-left: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .card li strong {
+        color: var(--text-primary);
+      }
+
+      /* Before & After Comparison Cards */
+      .diff-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin: 8px 0;
+      }
+
+      .diff-box {
+        border-radius: 10px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .diff-before {
+        background: var(--diff-del-bg);
+        border-left: 5px solid var(--diff-del-border);
+      }
+
+      .diff-after {
+        background: var(--diff-add-bg);
+        border-left: 5px solid var(--diff-add-border);
+      }
+
+      .diff-header {
+        font-size: 0.86rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .diff-before .diff-header {
+        color: var(--accent-red);
+      }
+      .diff-after .diff-header {
+        color: var(--accent-green);
+      }
+
+      /* Section Block for Narrative Buildup */
+      .narrative-block {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .narrative-label {
+        font-size: 0.76rem;
+        text-transform: uppercase;
+        font-weight: 800;
+        letter-spacing: 1.2px;
+        color: var(--accent-cyan);
+      }
+
+      /* SVG Diagrams and Visual Containers */
+      .diagram-container {
+        width: 100%;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--card-shadow);
+        flex-shrink: 0;
+      }
+
+      .diagram-container svg {
+        width: 100%;
+        max-width: 1000px;
+        height: auto;
+        display: block;
+      }
+
+      .diagram-scroll-hint {
+        display: none;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.76rem;
+        font-weight: 700;
+        color: var(--accent-cyan);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+
+      /* Member Badge List */
+      .member-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 24px;
+      }
+
+      .member-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        box-shadow: var(--card-shadow);
+      }
+
+      .member-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--accent-cyan),
+          var(--accent-blue)
+        );
+        color: #fff;
+        font-weight: 800;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .member-info h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .member-info p {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+
+      /* Tables */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--bg-card);
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+      }
+
+      th {
+        background: var(--bg-secondary);
+        color: var(--accent-cyan);
+        text-align: left;
+        padding: 12px 14px;
+        font-size: 0.84rem;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        border-bottom: 2px solid var(--border-color);
+      }
+
+      td {
+        padding: 11px 14px;
+        font-size: 0.88rem;
+        color: var(--text-secondary);
+        border-bottom: 1px solid var(--border-color);
+        vertical-align: top;
+        line-height: 1.5;
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      /* Code & Terminal */
+      code {
+        font-family: "JetBrains Mono", Consolas, Monaco, monospace;
+        background: var(--code-bg);
+        color: #38bdf8;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.85em;
+        border: 1px solid rgba(56, 189, 248, 0.2);
+      }
+
+      .terminal {
+        background: var(--code-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-family: "JetBrains Mono", Consolas, Monaco, monospace;
+        font-size: 0.82rem;
+        color: #e2e8f0;
+        line-height: 1.55;
+        overflow-x: auto;
+      }
+
+      .terminal .prompt {
+        color: var(--accent-green);
+        font-weight: bold;
+      }
+      .terminal .cmd {
+        color: #38bdf8;
+      }
+      .terminal .comment {
+        color: #64748b;
+        font-style: italic;
+      }
+      .terminal .err {
+        color: var(--accent-red);
+        font-weight: bold;
+      }
+
+      /* Drawer for Speaker Notes */
+      .notes-drawer {
+        background: var(--bg-secondary);
+        border-top: 2px solid var(--accent-cyan);
+        padding: 12px 24px;
+        max-height: 160px;
+        overflow-y: auto;
+        display: none;
+        flex-shrink: 0;
+        z-index: 40;
+      }
+
+      .notes-drawer.open {
+        display: block;
+      }
+      .notes-label {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        color: var(--accent-cyan);
+        font-weight: 800;
+        margin-bottom: 4px;
+      }
+      .notes-content {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+
+      /* Footer Controls */
+      .bottom-bar {
+        height: 42px;
+        background: var(--bg-secondary);
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        position: relative;
+        flex-shrink: 0;
+      }
+
+      .progress-track {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: var(--border-color);
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          var(--accent-cyan),
+          var(--accent-blue)
+        );
+        width: 0%;
+        transition: width 0.25s ease;
+      }
+
+      /* Custom Scrollbars */
+      .slide::-webkit-scrollbar,
+      .terminal::-webkit-scrollbar,
+      .notes-drawer::-webkit-scrollbar,
+      .diagram-container::-webkit-scrollbar,
+      table::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      .slide::-webkit-scrollbar-track,
+      .terminal::-webkit-scrollbar-track,
+      .notes-drawer::-webkit-scrollbar-track,
+      .diagram-container::-webkit-scrollbar-track,
+      table::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .slide::-webkit-scrollbar-thumb,
+      .terminal::-webkit-scrollbar-thumb,
+      .notes-drawer::-webkit-scrollbar-thumb,
+      .diagram-container::-webkit-scrollbar-thumb,
+      table::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 4px;
+      }
+      .slide::-webkit-scrollbar-thumb:hover,
+      .terminal::-webkit-scrollbar-thumb:hover,
+      .notes-drawer::-webkit-scrollbar-thumb:hover,
+      .diagram-container::-webkit-scrollbar-thumb:hover,
+      table::-webkit-scrollbar-thumb:hover {
+        background: var(--accent-cyan);
+      }
+
+      /* Tablet & Small Laptop (<= 1024px) */
+      @media (max-width: 1024px) {
+        .top-bar {
+          padding: 0 16px;
+        }
+        .slide {
+          width: 96%;
+          height: 94%;
+          padding: 16px 18px;
+        }
+        .grid-3 {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .grid-4 {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .member-grid {
+          grid-template-columns: repeat(2, 1fr) !important;
+        }
+      }
+
+      /* Mobile & Small Tablet (<= 768px) */
+      @media (max-width: 768px) {
+        /* Top Bar Navigation */
+        .top-bar {
+          height: auto;
+          min-height: 52px;
+          padding: 8px 14px;
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+        }
+
+        .brand {
+          font-size: 0.88rem;
+          gap: 8px;
+          display: flex;
+          align-items: center;
+        }
+
+        .brand-badge {
+          font-size: 0.72rem;
+          padding: 4px 8px;
+          white-space: nowrap;
+        }
+
+        .brand-sub {
+          display: inline;
+          font-size: 0.8rem;
+          color: var(--text-muted);
+        }
+
+        .controls {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .slide-select {
+          min-width: 170px;
+          max-width: 100%;
+          font-size: 0.82rem;
+          padding: 6px 10px;
+        }
+
+        .btn {
+          padding: 6px 12px;
+          font-size: 0.8rem;
+          gap: 6px;
+          white-space: nowrap;
+        }
+
+        /* Slide Viewport */
+        .viewport {
+          padding: 8px 6px;
+          align-items: stretch;
+        }
+
+        .slide {
+          width: 100% !important;
+          max-width: 100% !important;
+          height: 100% !important;
+          padding: 14px 12px !important;
+          border-radius: 10px;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        /* Slide Header & Titles */
+        .slide-header {
+          margin-bottom: 12px !important;
+          padding-bottom: 8px !important;
+        }
+
+        .slide-kicker {
+          font-size: 0.72rem !important;
+          letter-spacing: 1px;
+        }
+
+        .slide-title {
+          font-size: 1.32rem !important;
+          line-height: 1.3 !important;
+          margin-bottom: 6px !important;
+        }
+
+        .slide-subtitle {
+          font-size: 0.86rem !important;
+          line-height: 1.45 !important;
+        }
+
+        /* Grid Layouts to 1 column */
+        .grid-2,
+        .grid-3,
+        .grid-4,
+        .diff-container,
+        .member-grid {
+          grid-template-columns: 1fr !important;
+          gap: 12px !important;
+        }
+
+        .member-card {
+          padding: 12px 14px !important;
+          gap: 12px !important;
+        }
+
+        .member-avatar {
+          width: 42px !important;
+          height: 42px !important;
+          font-size: 1rem !important;
+        }
+
+        .member-info h4 {
+          font-size: 0.95rem !important;
+        }
+
+        /* Cards */
+        .card {
+          padding: 14px;
+          gap: 8px;
+          border-radius: 10px;
+        }
+
+        .card-title {
+          font-size: 0.98rem;
+        }
+
+        .card p,
+        .card li {
+          font-size: 0.86rem;
+          line-height: 1.5;
+        }
+
+        .card ul {
+          padding-left: 16px;
+          gap: 4px;
+        }
+
+        .diff-box {
+          padding: 12px;
+        }
+
+        .narrative-block {
+          padding: 12px;
+          margin-bottom: 10px;
+          gap: 6px;
+        }
+
+        .narrative-label {
+          font-size: 0.72rem;
+        }
+
+        /* Tables - Horizontal Touch Scroll */
+        table {
+          display: block;
+          width: 100%;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          border-radius: 8px;
+          margin: 8px 0;
+        }
+
+        th {
+          padding: 8px 10px;
+          font-size: 0.78rem;
+          min-width: 100px;
+          white-space: nowrap;
+        }
+
+        td {
+          padding: 8px 10px;
+          font-size: 0.82rem;
+          min-width: 110px;
+          line-height: 1.45;
+        }
+
+        .slide > * {
+          flex-shrink: 0;
+        }
+
+        /* Diagrams - Horizontal Touch Scroll */
+        .diagram-scroll-hint {
+          display: flex;
+          flex-shrink: 0;
+        }
+
+        .diagram-container {
+          flex-shrink: 0 !important;
+          display: block !important;
+          width: 100% !important;
+          height: 350px !important;
+          min-height: 350px !important;
+          padding: 14px 16px !important;
+          overflow-x: auto !important;
+          overflow-y: hidden !important;
+          -webkit-overflow-scrolling: touch;
+          border-radius: 12px;
+          border: 1px solid rgba(6, 182, 212, 0.45);
+          background: var(--bg-card);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+          margin-bottom: 14px;
+        }
+
+        .diagram-container svg {
+          width: 1000px !important;
+          min-width: 1000px !important;
+          height: 320px !important;
+          min-height: 320px !important;
+          display: block !important;
+          flex-shrink: 0 !important;
+        }
+
+        /* Terminal & Code */
+        .terminal {
+          padding: 10px 12px;
+          font-size: 0.76rem;
+          line-height: 1.45;
+          border-radius: 6px;
+        }
+
+        /* Speaker Notes Drawer */
+        .notes-drawer {
+          padding: 10px 16px;
+          max-height: 130px;
+        }
+
+        .notes-content {
+          font-size: 0.84rem;
+        }
+
+        /* Bottom Bar */
+        .bottom-bar {
+          height: 38px;
+          padding: 0 14px;
+          font-size: 0.75rem;
+          justify-content: center;
+        }
+
+        .desktop-shortcuts {
+          display: none;
+        }
+      }
+
+      /* Compact Phones (<= 540px) */
+      @media (max-width: 540px) {
+        .top-bar {
+          padding: 8px 10px;
+          gap: 8px;
+        }
+
+        .brand {
+          width: 100%;
+          justify-content: flex-start;
+        }
+
+        .controls {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          padding-bottom: 4px;
+        }
+
+        .controls::-webkit-scrollbar {
+          height: 3px;
+        }
+        .controls::-webkit-scrollbar-thumb {
+          background: var(--border-color);
+          border-radius: 3px;
+        }
+
+        .slide-select {
+          min-width: 160px;
+          flex-shrink: 0;
+          font-size: 0.8rem;
+          padding: 6px 8px;
+        }
+
+        .btn {
+          padding: 6px 10px;
+          font-size: 0.78rem;
+          flex-shrink: 0;
+          white-space: nowrap;
+          gap: 5px;
+        }
+
+        .slide-title {
+          font-size: 1.18rem !important;
+        }
+
+        .slide {
+          padding: 12px 10px !important;
+        }
+
+        .card {
+          padding: 12px;
+        }
+      }
+
+      @media print {
+        body {
+          overflow: visible;
+          height: auto;
+        }
+        .top-bar,
+        .bottom-bar,
+        .notes-drawer {
+          display: none !important;
+        }
+        .viewport {
+          display: block;
+          height: auto;
+        }
+        .slide {
+          position: relative;
+          opacity: 1 !important;
+          transform: none !important;
+          page-break-after: always;
+          height: auto;
+          min-height: 96vh;
+          margin-bottom: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Bar Navigation -->
+    <header class="top-bar">
+      <div class="brand">
+        <span class="brand-badge">Full-Lifecycle VA/PT Platform</span>
+        <span class="brand-sub">Greenbone OpenVAS &times; OWASP DefectDojo v3.4.101</span>
+      </div>
+
+      <div class="controls">
+        <select
+          id="slideSelect"
+          class="slide-select"
+          aria-label="Select slide to navigate"
+        ></select>
+        <button class="btn" id="prevBtn" title="Previous Slide">
+          &#8592;<span class="btn-text"> Prev</span>
+        </button>
+        <button class="btn" id="nextBtn" title="Next Slide">
+          <span class="btn-text">Next </span>&#8594;
+        </button>
+        <button class="btn" id="themeToggleBtn" title="Toggle Light/Dark Theme">
+          &#9728;<span class="btn-text"> Theme</span>
+        </button>
+        <button class="btn" id="notesBtn" title="Toggle Speaker Notes">
+          &#128221;<span class="btn-text"> Notes</span>
+        </button>
+        <button class="btn" id="fullscreenBtn" title="Toggle Fullscreen">
+          &#9974;<span class="btn-text"> Full</span>
+        </button>
+        <button class="btn print-btn" onclick="window.print()" title="Print to PDF">
+          &#128424;<span class="btn-text"> Export PDF</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Viewport -->
+    <main class="viewport">
+      <!-- SLIDE 1: Title & Team Presentation -->
+      <section
+        class="slide active"
+        data-title="1. Title & Team Presentation"
+        data-notes="Welcome honorable faculty and committee members. Today, our research team presents a fully automated, full-lifecycle Vulnerability Assessment and Penetration Testing (VA/PT) platform. We engineered this system on Kali Linux 2026.2 by coupling Greenbone OpenVAS with OWASP DefectDojo v3.4.101 to transition enterprise security from isolated scans to a continuous, closed-loop DevSecOps remediation architecture."
+      >
+        <div
+          class="slide-header"
+          style="margin-bottom: 36px; padding-bottom: 18px"
+        >
+          <h1
+            class="slide-title"
+            style="font-size: 2.3rem; line-height: 1.25; margin-bottom: 10px"
+          >
+            Engineering an Automated, Full-Lifecycle VA/PT Platform: Continuous
+            Scanning, Deduplication &amp; Remediation Governance
+          </h1>
+          <p
+            class="slide-subtitle"
+            style="font-size: 1.15rem; color: var(--text-muted)"
+          >
+            Bridging Active Network Vulnerability Assessment with Centralized
+            ASPM on Kali Linux 2026.2
+          </p>
+        </div>
+
+        <!-- Team Members Section -->
+        <div style="margin-top: 24px">
+          <div
+            class="slide-kicker"
+            style="margin-bottom: 16px; font-size: 0.85rem"
+          >
+            &#128101; Team Members
+          </div>
+          <div
+            class="member-grid"
+            style="
+              margin-top: 0;
+              display: grid;
+              grid-template-columns: repeat(3, 1fr);
+              gap: 18px;
+            "
+          >
+            <div
+              class="member-card"
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                padding: 18px 22px;
+                border-radius: 12px;
+                border: 1px solid var(--border-color);
+                border-left: 4px solid var(--accent-cyan);
+                background: var(--bg-card);
+                box-shadow: var(--card-shadow);
+              "
+            >
+              <div
+                class="member-avatar"
+                style="
+                  width: 50px;
+                  height: 50px;
+                  font-size: 1.15rem;
+                  flex-shrink: 0;
+                "
+              >
+                MM
+              </div>
+              <div class="member-info">
+                <h4
+                  style="
+                    font-size: 1.05rem;
+                    font-weight: 700;
+                    color: var(--text-primary);
+                    letter-spacing: 0.5px;
+                  "
+                >
+                  MD MOHIUDDIN
+                </h4>
+              </div>
+            </div>
+
+            <div
+              class="member-card"
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                padding: 18px 22px;
+                border-radius: 12px;
+                border: 1px solid var(--border-color);
+                border-left: 4px solid var(--accent-blue);
+                background: var(--bg-card);
+                box-shadow: var(--card-shadow);
+              "
+            >
+              <div
+                class="member-avatar"
+                style="
+                  width: 50px;
+                  height: 50px;
+                  font-size: 1.15rem;
+                  flex-shrink: 0;
+                "
+              >
+                MR
+              </div>
+              <div class="member-info">
+                <h4
+                  style="
+                    font-size: 1.05rem;
+                    font-weight: 700;
+                    color: var(--text-primary);
+                    letter-spacing: 0.5px;
+                  "
+                >
+                  MAHJABIN RAHMAN
+                </h4>
+              </div>
+            </div>
+
+            <div
+              class="member-card"
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                padding: 18px 22px;
+                border-radius: 12px;
+                border: 1px solid var(--border-color);
+                border-left: 4px solid var(--accent-purple);
+                background: var(--bg-card);
+                box-shadow: var(--card-shadow);
+              "
+            >
+              <div
+                class="member-avatar"
+                style="
+                  width: 50px;
+                  height: 50px;
+                  font-size: 1.15rem;
+                  flex-shrink: 0;
+                "
+              >
+                MT
+              </div>
+              <div class="member-info">
+                <h4
+                  style="
+                    font-size: 1.05rem;
+                    font-weight: 700;
+                    color: var(--text-primary);
+                    letter-spacing: 0.5px;
+                  "
+                >
+                  MD MAHMUDUL ISLAM TALUKDER
+                </h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 2: What is Penetration Testing & Why It Matters -->
+      <section
+        class="slide"
+        data-title="2. What is Penetration Testing?"
+        data-notes="Before diving into our automated platform, we must establish the core foundation: what is penetration testing and why is it essential? Penetration testing is an authorized, simulated cyberattack designed to safely exploit weaknesses in systems and networks. While vulnerability assessment identifies potential gaps, penetration testing proves real-world exploitability, exposes true business risk, and verifies whether security controls actually hold against real adversaries."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">
+            &#128737; Foundational Cybersecurity Concepts
+          </div>
+          <h2 class="slide-title">
+            What is Penetration Testing &amp; Why is It Crucial in Modern
+            Cybersecurity?
+          </h2>
+          <p class="slide-subtitle">
+            Moving beyond theoretical vulnerabilities to prove real-world
+            exploitability and business risk
+          </p>
+        </div>
+
+        <div class="grid-2" style="margin-top: 8px">
+          <!-- Card 1: What is Penetration Testing -->
+          <div class="card highlight-cyan">
+            <div class="card-title">
+              &#128269; What is Penetration Testing (Ethical Hacking)?
+            </div>
+            <p>
+              An <strong>authorized, simulated cyberattack</strong> performed
+              against an organization's computer systems, networks, or
+              applications to evaluate security posture by discovering and
+              safely exploiting vulnerabilities.
+            </p>
+            <div
+              style="
+                background: var(--bg-secondary);
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                padding: 12px;
+                margin-top: 4px;
+              "
+            >
+              <div
+                style="
+                  font-size: 0.82rem;
+                  font-weight: 800;
+                  color: var(--accent-cyan);
+                  text-transform: uppercase;
+                  margin-bottom: 6px;
+                "
+              >
+                VA vs. PT: Understanding the Key Difference
+              </div>
+              <ul
+                style="
+                  padding-left: 18px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 6px;
+                  font-size: 0.88rem;
+                "
+              >
+                <li>
+                  <strong>Vulnerability Assessment (The "What"):</strong>
+                  Automated, broad inventory of potential weaknesses, unpatched
+                  software, and configuration flaws.
+                </li>
+                <li>
+                  <strong>Penetration Testing (The "So What?"):</strong> Active,
+                  goal-driven exploitation demonstrating how an adversary can
+                  pivot, escalate privileges, or exfiltrate critical data.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Card 2: Why is it Crucial in Cybersecurity -->
+          <div class="card highlight-purple">
+            <div class="card-title">
+              &#128737; Why Penetration Testing is Crucial
+            </div>
+            <ul>
+              <li>
+                <strong>Proves Real-World Exploitability:</strong> Filters
+                scanner noise and false positives by confirming which
+                vulnerabilities threat actors can realistically weaponize.
+              </li>
+              <li>
+                <strong>Discovers Chained &amp; Complex Attack Paths:</strong>
+                Uncovers logic bugs and lateral movement vectors that automated
+                scanners cannot detect on their own.
+              </li>
+              <li>
+                <strong>Mandatory Compliance &amp; Standards:</strong> Required
+                by major regulatory frameworks including
+                <code>PCI-DSS 4.0</code>, <code>ISO/IEC 27001</code>,
+                <code>SOC 2 Type II</code>, and <code>HIPAA</code>.
+              </li>
+              <li>
+                <strong>Validates Incident Response &amp; Blue Teams:</strong>
+                Tests whether organizational SOC analysts, SIEM alerts, and
+                endpoint detection actually catch active adversarial activity.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Bottom Narrative Block -->
+        <div
+          class="narrative-block"
+          style="border-left: 4px solid var(--accent-green); margin-top: 14px"
+        >
+          <span class="narrative-label"
+            >&#128161; The Core DevSecOps Takeaway</span
+          >
+          <p>
+            <strong
+              >Security is not the absence of vulnerabilities, but the
+              capability to detect, prioritize, and remediate exploitable
+              flaws.</strong
+            >
+            Combining continuous network scanning with centralized vulnerability
+            management ensures that discovered exposure points are validated,
+            assigned, and resolved under strict SLAs before malicious actors
+            exploit them.
+          </p>
+        </div>
+      </section>
+
+      <!-- SLIDE 3: Core Project Objectives & Purpose -->
+      <section
+        class="slide"
+        data-title="3. Core Project Objectives"
+        data-notes="In this slide, we outline the foundational objectives driving our platform. Traditional cybersecurity assessments suffer from what we call 'point-in-time amnesia'—vulnerabilities are uncovered, reported in static PDFs, but lack an automated lifecycle to ensure remediation. Our core purpose is to bridge this gap by uniting active network vulnerability scanning with continuous ASPM governance, automated deduplication, and SLA compliance tracking."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">&#127919; Strategic Vision &amp; Goals</div>
+          <h2 class="slide-title">
+            Core Project Objectives &amp; Operational Purpose
+          </h2>
+          <p class="slide-subtitle">
+            Overcoming point-in-time auditing limitations with automated
+            vulnerability lifecycle governance
+          </p>
+        </div>
+
+        <div class="grid-3" style="margin-top: 8px">
+          <div class="card highlight-cyan">
+            <div class="card-title">&#10060; The Operational Problem</div>
+            <p>
+              Traditional cybersecurity audits suffer from
+              <strong>"point-in-time amnesia"</strong>:
+            </p>
+            <ul>
+              <li>
+                Scanners run once per quarter, producing static, isolated
+                400-page PDF/XML reports.
+              </li>
+              <li>
+                No historical continuity or remediation tracking exists between
+                consecutive assessments.
+              </li>
+              <li>
+                Engineering teams lack a verified, automated feedback loop to
+                validate that deployed patches actually fixed the flaws.
+              </li>
+            </ul>
+          </div>
+
+          <div class="card highlight-green">
+            <div class="card-title">&#127919; Core Project Purpose</div>
+            <p>
+              Build an end-to-end, reproducible, closed-loop DevSecOps
+              vulnerability management engine:
+            </p>
+            <ul>
+              <li>
+                <strong>Automated Feed Synchronization:</strong> Daily ingest of
+                fresh community threat intelligence (NVTs, CVEs, SCAP, CERT).
+              </li>
+              <li>
+                <strong>Active Network Assessment:</strong> Non-intrusive yet
+                thorough vulnerability scanning against designated enterprise
+                assets.
+              </li>
+              <li>
+                <strong>Centralized ASPM Ingestion:</strong> Rapid conversion of
+                raw scanner telemetry into relational database entities.
+              </li>
+            </ul>
+          </div>
+
+          <div class="card highlight-purple">
+            <div class="card-title">&#9989; Measurable Outcomes</div>
+            <p>Deliver quantifiable governance and eliminate alert fatigue:</p>
+            <ul>
+              <li>
+                <strong>Cryptographic Deduplication:</strong> Collapse duplicate
+                findings from recurring scans using deterministic SHA-256
+                signatures.
+              </li>
+              <li>
+                <strong>SLA Policy Enforcement:</strong> Enforce real-time
+                countdown clocks for remediation (e.g., Critical CVEs within 7
+                days).
+              </li>
+              <li>
+                <strong>Auto-Retest Verification:</strong> Automatically
+                transition resolved flaws to <code>Mitigated</code> upon
+                subsequent scans.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="narrative-block" style="margin-top: 14px">
+          <span class="narrative-label">&#128640; Strategic Impact</span>
+          <p>
+            <strong>Transforming Security Posture:</strong> By replacing
+            disjointed manual spreadsheet handoffs with a unified OpenVAS
+            &times; DefectDojo pipeline, organizations shift from reactive
+            firefighting to proactive, SLA-governed risk management.
+          </p>
+        </div>
+      </section>
+
+      <!-- SLIDE 4: Core Technology Matrix -->
+      <section
+        class="slide"
+        data-title="4. Core Technology Stack"
+        data-notes="Slide 3 details our complete technology matrix. Rather than relying on a single monolithic tool, we engineered a hybrid deployment. Kali Linux 2026.2 provides the tuned networking kernel; Greenbone OpenVAS runs natively for unimpeded socket transmission and packet crafting; and OWASP DefectDojo v3.4.101 runs as containerized microservices to deliver asset-centric vulnerability management and SLA governance."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">
+            &#128295; Platform Architecture &amp; Toolchain
+          </div>
+          <h2 class="slide-title">
+            Core Technology Matrix &amp; Architectural Stack
+          </h2>
+          <p class="slide-subtitle">
+            A purpose-built hybrid deployment uniting native network socket
+            performance with containerized ASPM
+          </p>
+        </div>
+
+        <div class="grid-4" style="margin-top: 8px">
+          <div class="card highlight-cyan">
+            <div class="card-title">&#128039; Host OS Platform</div>
+            <p><strong>Kali Linux 2026.2</strong></p>
+            <ul>
+              <li>
+                <strong>Role:</strong> Host Operating System &amp; Security
+                Subsystem
+              </li>
+              <li>
+                <strong>Network Tuning:</strong> Pre-configured socket limits,
+                raw packet crafting support, and kernel packet filters.
+              </li>
+              <li>
+                <strong>Tooling:</strong> Native Nmap, ARP/ICMP utilities, and
+                integrated penetration testing toolchain.
+              </li>
+            </ul>
+          </div>
+
+          <div class="card highlight-green">
+            <div class="card-title">&#128269; Detection Engine</div>
+            <p><strong>Greenbone OpenVAS (GVM)</strong></p>
+            <ul>
+              <li>
+                <strong>Role:</strong> Active Network Vulnerability Scanner
+              </li>
+              <li>
+                <strong>IPC Mechanism:</strong> High-speed UNIX domain socket at
+                <code>/run/ospd/ospd-openvas.sock</code>.
+              </li>
+              <li>
+                <strong>Feed Library:</strong> ~85,000+ daily-synced Network
+                Vulnerability Tests (NVTs).
+              </li>
+            </ul>
+          </div>
+
+          <div class="card highlight-purple">
+            <div class="card-title">&#128737; Management Plane</div>
+            <p><strong>OWASP DefectDojo v3.4.101</strong></p>
+            <ul>
+              <li>
+                <strong>Role:</strong> Centralized ASPM &amp; Governance
+                Platform
+              </li>
+              <li>
+                <strong>Ontology:</strong> Unified
+                <em>Organization &rarr; Asset</em> hierarchy.
+              </li>
+              <li>
+                <strong>Core Engines:</strong> Native OpenVAS XML parser, hash
+                deduplication, SLA enforcement, and retest tracking.
+              </li>
+            </ul>
+          </div>
+
+          <div class="card highlight-amber">
+            <div class="card-title">&#9881; Deployment Model</div>
+            <p><strong>Hybrid Architecture</strong></p>
+            <ul>
+              <li><strong>Role:</strong> Optimized Execution Model</li>
+              <li>
+                <strong>Scanner:</strong> Native host deployment prevents Docker
+                bridge NAT latency and source-IP masking.
+              </li>
+              <li>
+                <strong>ASPM:</strong> Dockerized microservices (Django, Celery,
+                Redis, PostgreSQL) guarantee clean isolation.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="narrative-block" style="margin-top: 14px">
+          <span class="narrative-label">&#128295; Architectural Synergy</span>
+          <p>
+            <strong>Why Hybrid Matters:</strong> Running the scanner natively
+            eliminates virtual NAT translation issues and packet latency, while
+            containerizing DefectDojo isolates complex web dependencies, task
+            queues, and databases for effortless maintenance and updates.
+          </p>
+        </div>
+      </section>
+
+      <!-- SLIDE 5: Problem Statement: The Real-Life Dilemma -->
+      <section
+        class="slide"
+        data-title="5. Real-World Dilemma (Before vs After)"
+        data-notes="Let us examine why this engineering endeavor was strictly necessary. In traditional operations, vulnerability scanning outputs a massive 300-page PDF report. Security analysts spend hours manually copying CVEs into spreadsheets. If you scan again next week, you get the exact same 300 pages, with no way to know what was fixed versus what was ignored. Our platform solves this with programmatic deduplication and automated verification loops."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">
+            &#9888; Problem Statement &amp; Real-Life Operational Crisis
+          </div>
+          <h2 class="slide-title">
+            The Real-World Dilemma: Legacy Scanning vs. Continuous ASPM
+          </h2>
+          <p class="slide-subtitle">
+            Why traditional security auditing models fail enterprise operations
+            and produce alert paralysis
+          </p>
+        </div>
+
+        <div class="diff-container">
+          <div class="diff-box diff-before">
+            <div
+              class="diff-header"
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 6px;
+              "
+            >
+              <span
+                >&#10060; BEFORE: Traditional "Spreadsheet &amp; PDF" Silo</span
+              >
+              <span
+                style="
+                  font-size: 0.68rem;
+                  font-weight: 800;
+                  background: rgba(239, 68, 68, 0.18);
+                  color: var(--accent-red);
+                  padding: 3px 8px;
+                  border-radius: 5px;
+                  letter-spacing: 0.6px;
+                  text-transform: uppercase;
+                "
+                >Legacy Model</span
+              >
+            </div>
+            <p>
+              <strong>1. Fragmented Scans:</strong> Security scans are run once
+              a quarter or after major breaches. No historical continuity exists
+              between scans.
+            </p>
+            <p>
+              <strong>2. The Static PDF Disaster:</strong> OpenVAS or Nessus
+              outputs a 400-page PDF with 1,200 findings. Analysts manually
+              extract CVEs into Excel spreadsheets.
+            </p>
+            <p>
+              <strong>3. Unmitigated Alert Fatigue:</strong> Running a re-scan
+              generates the exact same 1,200 findings. Teams have no automated
+              way to verify if patches actually worked.
+            </p>
+            <p>
+              <strong>4. No Accountability:</strong> Vulnerabilities sit
+              unpatched for 180+ days because there are no SLA timers, assigned
+              asset managers, or business criticality tags.
+            </p>
+          </div>
+
+          <div class="diff-box diff-after">
+            <div
+              class="diff-header"
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 6px;
+              "
+            >
+              <span
+                >&#9989; AFTER: Our Automated OpenVAS &times; DefectDojo
+                Platform</span
+              >
+              <span
+                style="
+                  font-size: 0.68rem;
+                  font-weight: 800;
+                  background: rgba(16, 185, 129, 0.18);
+                  color: var(--accent-green);
+                  padding: 3px 8px;
+                  border-radius: 5px;
+                  letter-spacing: 0.6px;
+                  text-transform: uppercase;
+                "
+                >ASPM Pipeline</span
+              >
+            </div>
+            <p>
+              <strong>1. Continuous Assessment:</strong> Scans run routinely
+              against registered organizational Assets (<code
+                >Target Lab Server</code
+              >
+              at <code>10.0.2.15</code>).
+            </p>
+            <p>
+              <strong>2. Programmatic Ingestion:</strong> Raw scan reports
+              (OpenVAS XML) are automatically parsed into relational database
+              entities within seconds.
+            </p>
+            <p>
+              <strong>3. Cryptographic Deduplication:</strong> Identical
+              vulnerabilities across scans are merged using deterministic hash
+              signatures. Zero duplicate noise!
+            </p>
+            <p>
+              <strong>4. Governance &amp; Auto-Retest:</strong> Real-time SLA
+              timers count down per finding. Subsequent scans automatically
+              close verified fixed flaws!
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="narrative-block"
+          style="
+            border-left: 4px solid var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+          "
+        >
+          <div style="flex: 1">
+            <span class="narrative-label">&#128202; Real-Life Data Impact</span>
+            <p style="margin-top: 4px">
+              <strong>Industry Metric:</strong> The average enterprise Mean Time
+              to Remediate (MTTR) for critical CVEs using manual spreadsheets is
+              <strong>194 days</strong>. In our integrated DefectDojo pipeline,
+              continuous SLA alerting and auto-deduplication reduces actionable
+              triage time from
+              <strong>22 hours per scan cycle to under 8 minutes</strong>.
+            </p>
+          </div>
+
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              flex-shrink: 0;
+            "
+          >
+            <div
+              style="
+                background: var(--bg-card);
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                padding: 6px 12px;
+                text-align: center;
+              "
+            >
+              <div
+                style="
+                  font-size: 0.68rem;
+                  color: var(--text-muted);
+                  text-transform: uppercase;
+                  font-weight: 700;
+                "
+              >
+                Manual Triage
+              </div>
+              <div
+                style="
+                  font-size: 1.05rem;
+                  font-weight: 800;
+                  color: var(--accent-red);
+                  font-family: monospace;
+                "
+              >
+                22 Hours
+              </div>
+            </div>
+            <div style="color: var(--accent-cyan); font-weight: bold">
+              &#10142;
+            </div>
+            <div
+              style="
+                background: var(--bg-card);
+                border: 1px solid var(--accent-cyan);
+                border-radius: 8px;
+                padding: 6px 12px;
+                text-align: center;
+              "
+            >
+              <div
+                style="
+                  font-size: 0.68rem;
+                  color: var(--accent-cyan);
+                  text-transform: uppercase;
+                  font-weight: 700;
+                "
+              >
+                ASPM Pipeline
+              </div>
+              <div
+                style="
+                  font-size: 1.05rem;
+                  font-weight: 800;
+                  color: var(--accent-green);
+                  font-family: monospace;
+                "
+              >
+                &lt; 8 Mins
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 6: System Architecture Visual Flow -->
+      <section
+        class="slide"
+        data-title="6. High-Level System Architecture"
+        data-notes="This architectural diagram illustrates our end-to-end data pipeline. On Kali Linux 2026.2, Greenbone OpenVAS communicates over UNIX domain sockets (/run/ospd/ospd-openvas.sock) to probe our Target Lab Server. The raw XML report is exported and ingested into our Dockerized OWASP DefectDojo container, which runs the OpenVAS parser, correlates endpoints, and manages SLA compliance."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">&#128736; End-to-End System Design</div>
+          <h2 class="slide-title">
+            System Architecture: Sensor, Pipeline &amp; Management Plane
+          </h2>
+          <p class="slide-subtitle">
+            Coupling native socket-based network scanning with
+            microservices-based vulnerability management
+          </p>
+        </div>
+
+        <!-- Architectural SVG Diagram -->
+        <div class="diagram-scroll-hint">
+          <span>&#8596; Swipe horizontally to explore full system architecture</span>
+        </div>
+        <div class="diagram-container">
+          <svg viewBox="0 0 1000 320" width="1000" height="320" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background Box Kali Host -->
+            <rect
+              x="10"
+              y="10"
+              width="980"
+              height="300"
+              rx="14"
+              fill="#0f172a"
+              stroke="#334155"
+              stroke-width="2"
+            />
+            <text
+              x="30"
+              y="38"
+              fill="#38bdf8"
+              font-size="14"
+              font-weight="bold"
+              font-family="monospace"
+            >
+              KALI LINUX 2026.2 HOST INFRASTRUCTURE
+            </text>
+
+            <!-- Component 1: Threat Feeds -->
+            <rect
+              x="35"
+              y="65"
+              width="180"
+              height="215"
+              rx="10"
+              fill="#1e293b"
+              stroke="#06b6d4"
+              stroke-width="2"
+            />
+            <text
+              x="50"
+              y="95"
+              fill="#f8fafc"
+              font-size="14"
+              font-weight="bold"
+            >
+              Community Threat Feeds
+            </text>
+            <text x="50" y="125" fill="#94a3b8" font-size="12">
+              &bull; NVT (NASL Tests)
+            </text>
+            <text x="50" y="150" fill="#94a3b8" font-size="12">
+              &bull; SCAP (CVE / CPE)
+            </text>
+            <text x="50" y="175" fill="#94a3b8" font-size="12">
+              &bull; CERT Advisories
+            </text>
+            <text x="50" y="200" fill="#94a3b8" font-size="12">
+              &bull; GVMD_DATA Objects
+            </text>
+            <rect
+              x="50"
+              y="225"
+              width="150"
+              height="35"
+              rx="6"
+              fill="#0284c7"
+            />
+            <text
+              x="65"
+              y="247"
+              fill="#ffffff"
+              font-size="11"
+              font-weight="bold"
+            >
+              greenbone-feed-sync
+            </text>
+
+            <!-- Arrow 1 to 2 -->
+            <path
+              d="M 215 172 L 265 172"
+              stroke="#06b6d4"
+              stroke-width="3"
+              marker-end="url(#arrow)"
+            />
+
+            <!-- Component 2: Native OpenVAS -->
+            <rect
+              x="270"
+              y="65"
+              width="220"
+              height="215"
+              rx="10"
+              fill="#1e293b"
+              stroke="#10b981"
+              stroke-width="2"
+            />
+            <text
+              x="285"
+              y="95"
+              fill="#f8fafc"
+              font-size="14"
+              font-weight="bold"
+            >
+              Greenbone GVM Daemons
+            </text>
+            <text x="285" y="120" fill="#94a3b8" font-size="11">
+              &bull; gvmd (Manager Daemon)
+            </text>
+            <text x="285" y="140" fill="#94a3b8" font-size="11">
+              &bull; PostgreSQL (Schema Cache)
+            </text>
+            <text x="285" y="160" fill="#94a3b8" font-size="11">
+              &bull; ospd-openvas (Scanner)
+            </text>
+            <rect
+              x="285"
+              y="180"
+              width="190"
+              height="40"
+              rx="6"
+              fill="#064e3b"
+              stroke="#10b981"
+              stroke-width="1"
+            />
+            <text
+              x="295"
+              y="205"
+              fill="#6ee7b7"
+              font-size="11"
+              font-family="monospace"
+            >
+              /run/ospd/ospd-openvas.sock
+            </text>
+            <text
+              x="285"
+              y="250"
+              fill="#e2e8f0"
+              font-size="11"
+              font-weight="bold"
+            >
+              Target IP: 10.0.2.15
+            </text>
+
+            <!-- Arrow 2 to 3 -->
+            <path d="M 490 172 L 540 172" stroke="#10b981" stroke-width="3" />
+
+            <!-- Component 3: XML Artifact -->
+            <rect
+              x="545"
+              y="120"
+              width="130"
+              height="100"
+              rx="8"
+              fill="#334155"
+              stroke="#f59e0b"
+              stroke-width="2"
+            />
+            <text
+              x="560"
+              y="150"
+              fill="#fbbf24"
+              font-size="13"
+              font-weight="bold"
+            >
+              Exported Scan
+            </text>
+            <text
+              x="560"
+              y="175"
+              fill="#ffffff"
+              font-size="11"
+              font-family="monospace"
+            >
+              OpenVAS XML
+            </text>
+            <text x="560" y="195" fill="#94a3b8" font-size="10">
+              CVSS, OID, Ports
+            </text>
+
+            <!-- Arrow 3 to 4 -->
+            <path d="M 675 172 L 725 172" stroke="#f59e0b" stroke-width="3" />
+
+            <!-- Component 4: Dockerized DefectDojo -->
+            <rect
+              x="730"
+              y="65"
+              width="240"
+              height="215"
+              rx="10"
+              fill="#1e293b"
+              stroke="#8b5cf6"
+              stroke-width="2"
+            />
+            <text
+              x="745"
+              y="95"
+              fill="#f8fafc"
+              font-size="14"
+              font-weight="bold"
+            >
+              OWASP DefectDojo (Docker)
+            </text>
+            <text x="745" y="120" fill="#94a3b8" font-size="11">
+              &bull; Org: Internal Infrastructure
+            </text>
+            <text x="745" y="140" fill="#94a3b8" font-size="11">
+              &bull; Asset: Target Lab Server
+            </text>
+            <text x="745" y="160" fill="#94a3b8" font-size="11">
+              &bull; OpenVAS XML Parser
+            </text>
+            <text x="745" y="180" fill="#94a3b8" font-size="11">
+              &bull; Hash Deduplication Engine
+            </text>
+            <rect
+              x="745"
+              y="205"
+              width="210"
+              height="35"
+              rx="6"
+              fill="#4c1d95"
+            />
+            <text
+              x="760"
+              y="227"
+              fill="#ddd6fe"
+              font-size="11"
+              font-weight="bold"
+            >
+              SLA Timers &amp; Retest Closure
+            </text>
+          </svg>
+        </div>
+
+        <div class="grid-3" style="margin-top: 14px">
+          <div class="card highlight-cyan">
+            <div class="card-title">1. Detection Layer (GVM)</div>
+            <p>
+              Native execution guarantees maximum network packet generation and
+              accurate TCP/UDP banner grabbing without container bridge packet
+              fragmentation.
+            </p>
+          </div>
+          <div class="card highlight-amber">
+            <div class="card-title">2. Ingestion Pipeline</div>
+            <p>
+              Standardized Greenbone XML artifacts contain rich telemetry: CVE
+              identifiers, CVSS v3.1 vector strings, port mappings, and verified
+              proof-of-concept output.
+            </p>
+          </div>
+          <div class="card highlight-purple">
+            <div class="card-title">3. ASPM Governance</div>
+            <p>
+              DefectDojo v3.4.101 isolates vulnerabilities into distinct
+              organizational boundaries, tracking asset owners, regulatory
+              requirements, and remediation SLAs.
+            </p>
+          </div>
+        </div>
+      </section><!-- SLIDE 7: Why Kali Linux 2026.2 as Host OS -->
+      <section
+        class="slide"
+        data-title="7. Why Kali Linux 2026.2 as Host OS"
+        data-notes="In this slide, we justify our choice of Kali Linux 2026.2 as the host operating system. A network vulnerability scanner is only as effective as its underlying network stack. Kali Linux provides pre-compiled kernel optimizations for raw packet manipulation and socket tuning, direct package synchronization for Greenbone GVM daemons, and co-located offensive verification tools on the exact same subnet."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">
+            &#9878; Host Infrastructure Justification
+          </div>
+          <h2 class="slide-title">
+            Why Kali Linux 2026.2 as the Host Operating System?
+          </h2>
+          <p class="slide-subtitle">
+            Leveraging a specialized, security-optimized Linux kernel for
+            high-fidelity network auditing
+          </p>
+        </div>
+
+        <div class="grid-3" style="margin-top: 8px">
+          <div class="card highlight-cyan">
+            <div class="card-title">
+              &#128039; 1. Specialized Kernel &amp; Sockets
+            </div>
+            <p>
+              <strong>Low-Level Network Tuning:</strong> Kali Linux kernels are
+              pre-compiled with optimized socket parameters for raw ARP/ICMP
+              ping sweeps, custom TCP flags, and dynamic socket timeouts.
+            </p>
+            <p>
+              <strong>Zero Throttling:</strong> Avoids generic server
+              distribution socket rate limits, ensuring high-speed SYN port
+              scans without kernel packet drops.
+            </p>
+          </div>
+
+          <div class="card highlight-blue">
+            <div class="card-title">&#128230; 2. Native GVM Ecosystem</div>
+            <p>
+              <strong>Direct Upstream Packaging:</strong> Debian/Kali
+              repositories maintain native, tightly tested security packaging
+              for all core GVM daemons (<code>gvmd</code>,
+              <code>openvas-scanner</code>, <code>gsad</code>).
+            </p>
+            <p>
+              <strong>Zero-Overhead Sync:</strong> Direct systemd daemon
+              integration guarantees frictionless synchronization with daily
+              Greenbone Community Feeds.
+            </p>
+          </div>
+
+          <div class="card highlight-purple">
+            <div class="card-title">
+              &#128295; 3. Co-located Offensive Tooling
+            </div>
+            <p>
+              <strong>Immediate Verification:</strong> Kali provides built-in
+              offensive suites (Metasploit, Nmap, Netcat) in the exact same host
+              network namespace.
+            </p>
+            <p>
+              <strong>Manual Proof-of-Concept:</strong> When OpenVAS discovers a
+              high-risk flaw (e.g., MS17-010 or unauthenticated RCE), engineers
+              can immediately verify exploitability on the target subnet.
+            </p>
+          </div>
+        </div>
+
+        <div class="narrative-block" style="margin-top: 14px">
+          <span class="narrative-label"
+            >&#128736; Systems Engineering Rationale</span
+          >
+          <p>
+            Selecting <strong>Kali Linux 2026.2</strong> provides an
+            enterprise-grade testing foundation. Rather than retrofitting a
+            standard cloud distribution with third-party security repositories,
+            Kali delivers native raw socket permissions, hardened network
+            stacks, and seamless virtualization driver support out of the box.
+          </p>
+        </div>
+      </section>
+
+      <!-- SLIDE 8: Why Native OpenVAS vs Containerized Scanner -->
+      <section
+        class="slide"
+        data-title="8. Why Native OpenVAS vs Docker"
+        data-notes="This slide addresses a crucial architectural decision: why run OpenVAS natively rather than inside Docker? Network vulnerability scanning requires raw socket access to craft packets, analyze TCP banners, and measure round-trip latency. Running OpenVAS inside a Docker bridge network introduces NAT translation overhead and masks IP addresses. Native UNIX socket IPC provides maximum throughput, while containerizing DefectDojo keeps web microservices cleanly isolated."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">
+            &#9889; Scanner Architecture &amp; IPC Design
+          </div>
+          <h2 class="slide-title">
+            Why Native Greenbone OpenVAS vs. Containerized Scanning?
+          </h2>
+          <p class="slide-subtitle">
+            Analyzing why native host execution was selected over a monolithic
+            container deployment
+          </p>
+        </div>
+
+        <div class="grid-3" style="margin-top: 8px">
+          <div class="card highlight-green">
+            <div class="card-title">&#9889; 1. Raw Socket Transmission</div>
+            <p>
+              <strong>Direct Hardware Access:</strong> Vulnerability scanning
+              relies on raw TCP SYN packets, dynamic banner grabs, and precise
+              round-trip timing.
+            </p>
+            <p>
+              <strong>No NAT Masquerading:</strong> Docker bridge networks
+              (<code>docker0</code>) mask source IPs, fragment UDP packets, and
+              produce false positives during OS fingerprinting.
+            </p>
+          </div>
+
+          <div class="card highlight-amber">
+            <div class="card-title">&#128279; 2. UNIX Socket Throughput</div>
+            <p>
+              <strong>High-Speed Local IPC:</strong> Daemon communication
+              between <code>gvmd</code> and <code>ospd-openvas</code> takes
+              place directly over <code>/run/ospd/ospd-openvas.sock</code>.
+            </p>
+            <p>
+              <strong>Zero Network Latency:</strong> Eliminates virtual bridge
+              serialization, port forwarding bottlenecks, and TLS overhead when
+              processing 85,000+ NVTs.
+            </p>
+          </div>
+
+          <div class="card highlight-cyan">
+            <div class="card-title">&#128190; 3. Feed Storage Stability</div>
+            <p>
+              <strong>Direct Block I/O:</strong> Daily community feeds write
+              directly to local NVRAM and filesystem blocks (<code
+                >/var/lib/gvm/</code
+              >
+              and <code>/var/lib/openvas/</code>).
+            </p>
+            <p>
+              <strong>No Volume Contention:</strong> Avoids overlay filesystem
+              locking penalties and orphaned
+              <code>feed-update.lock</code> deadlocks common in multi-container
+              mounts.
+            </p>
+          </div>
+        </div>
+
+        <div class="narrative-block" style="margin-top: 14px">
+          <span class="narrative-label"
+            >&#128394; Architectural Compromise Rejected: Why Not Full
+            Docker?</span
+          >
+          <p>
+            <strong>The Hybrid Architecture Advantage:</strong> We rejected
+            running OpenVAS inside Docker because container network bridges mask
+            target IP addresses and degrade raw scanning accuracy. Our hybrid
+            architecture combines the best of both worlds:
+            <strong>native host execution</strong> for the scanner to preserve
+            bare-metal network fidelity, paired with
+            <strong>Docker containerization</strong> for DefectDojo's web and
+            database microservices.
+          </p>
+        </div>
+      </section>
+
+      <!-- SLIDE 9: Why DefectDojo v3.4.101 & The Unified Assets Ontology -->
+      <section
+        class="slide"
+        data-title="9. Why DefectDojo v3.4.101 (Assets)"
+        data-notes="DefectDojo v3.4.101 represents a major milestone in vulnerability management. Previous versions used 'Product Types' and 'Products', which only made sense for software code repositories. In v3.4.101, everything is unified under 'Organizations' and 'Assets'. This means our Target Lab Server at 10.0.2.15 is modeled as a real infrastructure asset with its own manager, SLAs, and compliance tags."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">
+            &#128193; ASPM Paradigm Shift in Version 3.4.101
+          </div>
+          <h2 class="slide-title">
+            Why OWASP DefectDojo v3.4.101 &amp; The Unified "Assets" Hierarchy
+          </h2>
+          <p class="slide-subtitle">
+            Understanding the transition from software-centric "Products" to
+            comprehensive infrastructure "Assets"
+          </p>
+        </div>
+
+        <div class="diff-container">
+          <div class="diff-box diff-before">
+            <div class="diff-header">
+              &#128683; Legacy DefectDojo Model (v2.x - v3.3.x)
+            </div>
+            <p>
+              <strong>Terminology:</strong> <em>"Product Types"</em> &rarr;
+              <em>"Products"</em>
+            </p>
+            <p>
+              <strong>Design Limitation:</strong> Originally designed solely for
+              Software Development Lifecycle (SDLC). Infrastructure servers,
+              physical firewalls, and cloud subnets had to be awkwardly
+              categorized as "Products".
+            </p>
+            <p>
+              <strong>Fragmented Asset Views:</strong> Network hosts and
+              endpoints were treated as secondary afterthought tables rather
+              than primary governance objects.
+            </p>
+          </div>
+
+          <div class="diff-box diff-after">
+            <div class="diff-header">
+              &#128504; Modern DefectDojo Model (v3.4.101 Active Release)
+            </div>
+            <p>
+              <strong>Terminology:</strong> <em>"Organizations"</em> &rarr;
+              <em>"Assets"</em>
+            </p>
+            <p>
+              <strong>Universal Taxonomy:</strong> Unifies applications,
+              microservices, cloud VPCs, and physical lab servers (e.g.,
+              <code>Target Lab Server</code>) into a single, cohesive governance
+              model.
+            </p>
+            <p>
+              <strong>Built-in Infrastructure Controls:</strong> Native dropdown
+              actions for <em>View Hosts</em>, <em>View Locations</em>,
+              <em>Vulnerable Hosts</em>, <em>Location Reports</em>, and
+              <em>Asset Reports</em>.
+            </p>
+          </div>
+        </div>
+
+        <!-- Relational Data Mapping Table -->
+        <table style="margin-top: 10px">
+          <thead>
+            <tr>
+              <th>v3.4.101 Relational Entity</th>
+              <th>Our Deployed Instance Value</th>
+              <th>Operational Purpose &amp; Real-Life Function</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Organization*</strong></td>
+              <td><code>Internal Infrastructure</code></td>
+              <td>
+                Top-level enterprise perimeter; groups all internal networks and
+                lab resources under one governance boundary.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Asset*</strong></td>
+              <td><code>Target Lab Server</code></td>
+              <td>
+                The physical/virtual host scanned at <code>10.0.2.15</code>;
+                binds technical contacts, asset managers, and business
+                criticality.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>SLA Configuration*</strong></td>
+              <td><code>Default</code></td>
+              <td>
+                Enforces strict remediation deadlines: Critical = 7 days, High =
+                30 days, Medium = 60 days.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Engagement</strong></td>
+              <td><code>Q4 Security Audit 2026</code></td>
+              <td>
+                The time-bounded testing container housing individual scan runs,
+                tests, and deduplicated findings.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- SLIDE 10: Implementation Walkthrough 1: Finding Target IP & DefectDojo Provisioning -->
+      <section
+        class="slide"
+        data-title="10. Implementation: Target Discovery & Setup"
+        data-notes="In Step 1 of our practical implementation, we discovered our target machine's network location. Rather than guessing an IP address, we used Kali's local network interfaces and subnet reconnaissance tools to find 10.0.2.15. Then, inside DefectDojo's web interface, we created our Organization and provisioned our Target Lab Server Asset with an enforced SLA policy."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">
+            &#128187; Practical Implementation Step 1
+          </div>
+          <h2 class="slide-title">
+            Target Network Discovery &amp; DefectDojo Asset Provisioning
+          </h2>
+          <p class="slide-subtitle">
+            Establishing ground truth on the target network and initializing
+            relational governance containers
+          </p>
+        </div>
+
+        <!-- Upper Row: Reconnaissance & Provisioning Steps -->
+        <div class="grid-2">
+          <!-- Reconnaissance Card -->
+          <div class="card highlight-cyan">
+            <div class="card-title">
+              &#128270; 1. Active Subnet Reconnaissance &amp; IP Discovery
+            </div>
+            <p>
+              <strong>Why Pre-Flight Discovery is Essential:</strong> Launching
+              a 65,535-port vulnerability scan against an unverified or dead IP
+              causes massive TCP handshake timeouts and wastes hours of scanner
+              resources. Subnet ping sweeps establish ground truth before
+              scanning.
+            </p>
+            <div class="terminal">
+              <span class="comment"
+                ># 1. Inspect local network interface &amp; broadcast
+                domain</span
+              >
+              <span class="prompt">kali@kali:~$</span>
+              <span class="cmd">ip -brief address show eth0</span>
+              <span class="comment"
+                >eth0 UP 10.0.2.15/24 fe80::a00:27ff:fe4a:3e21/64</span
+              >
+
+              <span class="comment"
+                ># 2. Probe active hosts on the subnet via Nmap Ping Sweep</span
+              >
+              <span class="prompt">kali@kali:~$</span>
+              <span class="cmd">sudo nmap -sn 10.0.2.0/24</span>
+              <span class="comment"
+                >Nmap scan report for Target Lab Server (10.0.2.15)</span
+              >
+              <span class="comment"
+                >Host is up (0.00042s latency). MAC: 08:00:27:4A:3E:21</span
+              >
+            </div>
+            <p style="margin-top: 4px">
+              <strong>Outcome:</strong> Verified host liveness at
+              <code>10.0.2.15</code> with sub-millisecond round-trip latency,
+              establishing the exact scope for OpenVAS task creation.
+            </p>
+          </div>
+
+          <!-- Provisioning Card -->
+          <div class="card highlight-purple">
+            <div class="card-title">
+              &#127970; 2. DefectDojo ASPM Hierarchy Provisioning
+            </div>
+            <p>
+              <strong>Relational Architecture Requirement:</strong> DefectDojo
+              v3.4.101 enforces strict referential integrity. An
+              <em>Organization</em> must exist before an <em>Asset</em> can be
+              created, and an <em>Asset</em> must exist before an
+              <em>Engagement</em> can ingest scan telemetry.
+            </p>
+            <ul>
+              <li>
+                <strong>Action 1: Organization Creation:</strong> Navigated to
+                <code>Assets &rarr; Add Organization</code> &rarr; Created
+                <strong><code>Internal Infrastructure</code></strong> to bound
+                our private audit perimeter.
+              </li>
+              <li>
+                <strong>Action 2: Asset Entity Setup:</strong> Opened
+                <code>Asset List &gt; Add Asset</code>: <br />&bull;
+                <em>Name:</em> <code>Target Lab Server</code> <br />&bull;
+                <em>Host Target:</em> <code>10.0.2.15</code> <br />&bull;
+                <em>Criticality:</em> <code>High Impact Infrastructure</code>
+                <br />&bull; <em>SLA Configuration:</em> Selected
+                <code>Default</code> (7/30/60 Days)
+              </li>
+              <li>
+                <strong>Action 3: Engagement Initialization:</strong> Created
+                interactive container
+                <strong><code>Q4 Security Audit 2026</code></strong> ready for
+                telemetry import.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Lower Row: Target Specification & Hierarchy Mapping Matrix -->
+        <div class="grid-3" style="margin-top: 14px">
+          <div class="card highlight-blue">
+            <div class="card-title" style="font-size: 0.95rem">
+              &#127919; Target Network Parameters
+            </div>
+            <ul style="font-size: 0.85rem; line-height: 1.5">
+              <li>
+                <strong>Target IP:</strong> <code>10.0.2.15</code> (Subnet:
+                <code>/24</code>)
+              </li>
+              <li>
+                <strong>Interface:</strong> <code>eth0</code> (Virtual NAT
+                Bridge)
+              </li>
+              <li>
+                <strong>Round-Trip Time:</strong> <code>0.42 ms</code> (Local
+                Host)
+              </li>
+              <li><strong>Scan Scope:</strong> Unrestricted TCP / Top UDP</li>
+            </ul>
+          </div>
+
+          <div class="card highlight-green">
+            <div class="card-title" style="font-size: 0.95rem">
+              &#128193; Relational Entity Mapping
+            </div>
+            <ul style="font-size: 0.85rem; line-height: 1.5">
+              <li>
+                <strong>Organization:</strong>
+                <code>Internal Infrastructure</code>
+              </li>
+              <li>
+                <strong>Primary Asset:</strong> <code>Target Lab Server</code>
+              </li>
+              <li>
+                <strong>Audit Engagement:</strong>
+                <code>Q4 Security Audit 2026</code>
+              </li>
+              <li>
+                <strong>Lead Contact:</strong>
+                <code>DevSecOps SecOps Team</code>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card highlight-amber">
+            <div class="card-title" style="font-size: 0.95rem">
+              &#9200; Bound Governance Policy
+            </div>
+            <ul style="font-size: 0.85rem; line-height: 1.5">
+              <li>
+                <strong>Critical Severity (9.0+):</strong> <code>7 Days</code>
+              </li>
+              <li>
+                <strong>High Severity (7.0 - 8.9):</strong> <code>30 Days</code>
+              </li>
+              <li>
+                <strong>Medium Severity (4.0 - 6.9):</strong>
+                <code>60 Days</code>
+              </li>
+              <li>
+                <strong>Auto-Verification:</strong>
+                <code>Enabled on Retest</code>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Bottom Narrative Block -->
+        <div
+          class="narrative-block"
+          style="border-left: 4px solid var(--accent-cyan); margin-top: 14px"
+        >
+          <span class="narrative-label"
+            >&#128273; Operational Engineering Best Practice</span
+          >
+          <p>
+            <strong
+              >Why Upfront Provisioning Eliminates Enterprise Triage
+              Debt:</strong
+            >
+            In legacy audits, vulnerability scans are executed blindly without
+            asset context, producing orphan findings with no clear owner. By
+            establishing the network target (<code>10.0.2.15</code>) and
+            pre-binding it to an organizational Asset with enforced SLAs inside
+            DefectDojo, every subsequent vulnerability ingested from OpenVAS is
+            automatically assigned, prioritized, and tracked against corporate
+            remediation deadlines.
+          </p>
+        </div>
+      </section>
+
+      <!-- SLIDE 11: Engineering Troubleshooting Case Study 1: Feed Owner & Port List Blockers -->
+      <section
+        class="slide"
+        data-title="11. Troubleshooting: Feed Owner & Port Lists"
+        data-notes="During deployment on Kali Linux 2026.2, we hit real-world system errors. When trying to save our Target in Greenbone, the web UI showed two errors: 'The feed owner is currently not set' and 'Failed to create a new Target because the default Port List is not available'. Here is the before, after, why we did it, and how we fixed it."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">
+            &#128297; Empirical Systems Engineering Case Study 1
+          </div>
+          <h2 class="slide-title">
+            Resolving Unset Feed Owner UUID &amp; Missing Port Lists
+          </h2>
+          <p class="slide-subtitle">
+            Overcoming relational database foreign-key constraints in Greenbone
+            Vulnerability Manager
+          </p>
+        </div>
+
+        <!-- Problem 1: Unset Feed Owner -->
+        <div class="diff-container">
+          <div class="diff-box diff-del-bg diff-before">
+            <div class="diff-header">
+              &#10060; The Blocker: Unset Feed Owner UUID
+            </div>
+            <p class="err" style="color: var(--accent-red); font-weight: bold">
+              Error: "The feed owner is currently not set. This issue may be due
+              to the feed not having completed its synchronization."
+            </p>
+            <p>
+              <strong>Why It Happened:</strong> In Greenbone GVM, feed data
+              (port lists, scan configs) are stored as relational rows in
+              PostgreSQL. PostgreSQL requires an owning user UUID so security
+              permissions can be enforced. Without an owner, the manager refuses
+              to insert rows.
+            </p>
+          </div>
+
+          <div class="diff-box diff-add-bg diff-after">
+            <div class="diff-header">
+              &#9989; The Solution: Automated Feed Owner Binding
+            </div>
+            <div class="terminal">
+              <span class="comment"
+                ># Query admin user UUID and bind to internal GVM feed
+                setting</span
+              >
+              <span class="prompt">kali@kali:~$</span>
+              <span class="cmd"
+                >sudo runuser -u _gvm -- gvmd --modify-setting
+                78eceaec-3385-11ea-b237-28d24461215b --value $(sudo runuser -u
+                _gvm -- gvmd --get-users --verbose | grep admin | awk '{print
+                $2}')</span
+              >
+            </div>
+            <p>
+              <strong>The Purpose:</strong> Automatically binds our active admin
+              UUID into setting <code>78eceaec...</code>, granting the daemon
+              permission to instantiate feed objects.
+            </p>
+          </div>
+        </div>
+
+        <!-- Problem 2: Missing Port List -->
+        <div class="diff-container" style="margin-top: 10px">
+          <div class="diff-box diff-del-bg diff-before">
+            <div class="diff-header">
+              &#10060; The Blocker: Missing Default Port List
+            </div>
+            <p class="err" style="color: var(--accent-red); font-weight: bold">
+              Error: "Failed to create a new Target because the default Port
+              List is not available."
+            </p>
+            <p>
+              <strong>Why It Happened:</strong> The scanner downloaded the port
+              list XML files, but <code>gvmd</code> had not yet parsed the XML
+              into PostgreSQL tables (<em>All IANA assigned TCP</em>,
+              <em>All TCP and Nmap top 100 UDP</em>).
+            </p>
+          </div>
+
+          <div class="diff-box diff-add-bg diff-after">
+            <div class="diff-header">
+              &#9989; The Solution: GVMD-Data Sync &amp; Rebuild
+            </div>
+            <div class="terminal">
+              <span class="prompt">kali@kali:~$</span>
+              <span class="cmd">sudo greenbone-feed-sync --type gvmd-data</span>
+              <span class="prompt">kali@kali:~$</span>
+              <span class="cmd"
+                >sudo runuser -u _gvm -- gvmd --rebuild-gvmd-data=all</span
+              >
+            </div>
+            <p>
+              <strong>The Purpose:</strong> Forces <code>gvmd</code> to read the
+              raw XML port definitions and populate the relational tables,
+              instantly unlocking Target creation in the GUI.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 12: Engineering Troubleshooting Case Study 2: Feed Locks & Scan Config Availability -->
+      <section
+        class="slide"
+        data-title="12. Troubleshooting: Mutex Locks & Scan Configs"
+        data-notes="The second major engineering challenge was the dreaded 'Feed locked' error and 'Scan Config is not available'. Kali's background daemons constantly placed exclusive mutex locks on /var/lib/gvm/feed-update.lock. Every time we restarted GVM, it reset the synchronization. Here is how we cleanly cleared the lock, verified the socket, and restored the default Scan Configs."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">
+            &#128297; Empirical Systems Engineering Case Study 2
+          </div>
+          <h2 class="slide-title">
+            Resolving Mutex Lock Contention &amp; Missing Scan Configs
+          </h2>
+          <p class="slide-subtitle">
+            Managing asynchronous daemon locks and verifying OSP UNIX domain
+            sockets
+          </p>
+        </div>
+
+        <div class="diff-container">
+          <div class="diff-box diff-del-bg diff-before">
+            <div class="diff-header">
+              &#10060; The Blocker: Mutex Lock &amp; Missing Scan Config
+            </div>
+            <p class="err" style="color: var(--accent-red); font-weight: bold">
+              Error: "/var/lib/gvm/feed-update.lock is locked by another
+              process."
+            </p>
+            <p class="err" style="color: var(--accent-red); font-weight: bold">
+              Error: "Failed to create a new Task because the default Scan
+              Config is not available."
+            </p>
+            <p>
+              <strong>Why It Happened:</strong> When GVM starts, systemd fires
+              an automated background sync. This background job creates a mutex
+              lock file (<code>feed-update.lock</code>). If an engineer runs
+              manual CLI commands during this window, the database deadlocks,
+              preventing scan profiles (<em>Full and fast</em>) from compiling.
+            </p>
+          </div>
+
+          <div class="diff-box diff-add-bg diff-after">
+            <div class="diff-header">
+              &#9989; The Solution: Graceful Lock Reset &amp; Foreground Sync
+            </div>
+            <div class="terminal">
+              <span class="comment"
+                ># 1. Stop daemons to halt competing background threads</span
+              >
+              <span class="prompt">kali@kali:~$</span>
+              <span class="cmd">sudo gvm-stop</span>
+              <span class="comment"
+                ># 2. Safely remove orphaned lock files</span
+              >
+              <span class="prompt">kali@kali:~$</span>
+              <span class="cmd">sudo rm -f /var/lib/gvm/feed-update.lock</span>
+              <span class="comment"
+                ># 3. Verify UNIX domain socket ownership &amp; start
+                services</span
+              >
+              <span class="prompt">kali@kali:~$</span>
+              <span class="cmd">sudo gvm-start</span>
+              <span class="prompt">kali@kali:~$</span>
+              <span class="cmd">ls -l /run/ospd/ospd-openvas.sock</span>
+              <span class="comment"
+                >srwxrwx--- 1 _gvm _gvm 0 Oct 15 09:09
+                /run/ospd/ospd-openvas.sock</span
+              >
+            </div>
+            <p>
+              <strong>The Purpose:</strong> Eliminates race conditions between
+              background and foreground threads, allowing <code>gvmd</code> to
+              cleanly register default scan profiles.
+            </p>
+          </div>
+        </div>
+
+        <div class="narrative-block" style="margin-top: 10px">
+          <span class="narrative-label"
+            >&#128273; Key Architectural Takeaway</span
+          >
+          <p>
+            <strong>Why NVTs Must Be Available First:</strong> In OpenVAS, a
+            <em>Scan Configuration</em> is essentially a filtered query of
+            Network Vulnerability Tests. If the NVT cache is empty,
+            <code>gvmd</code> cannot compile the scan configuration. Once feeds
+            sync completely in foreground mode, the
+            <strong>Full and fast</strong> scan config becomes immediately
+            available in the web UI.
+          </p>
+        </div>
+      </section>
+
+      <!-- SLIDE 13: Executing the Scan & Exporting Raw Telemetry -->
+      <section
+        class="slide"
+        data-title="13. Active Scan & XML Telemetry"
+        data-notes="With all port lists, feed owners, and scan configs successfully restored, we launched our active vulnerability scan against our target server. Here we show the authentic scan execution parameters, the live service banners discovered, and the genuine OpenVAS XML schema export containing CVSS v3.1 vector strings, OIDs, and QoD confidence ratings."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">
+            &#128373; Operational Phase 2: Active Vulnerability Assessment
+          </div>
+          <h2 class="slide-title">
+            Executing the Network Assessment &amp; Generating XML Telemetry
+          </h2>
+          <p class="slide-subtitle">
+            Active port enumeration, service fingerprinting, and vulnerability
+            signature extraction against Target 10.0.2.15
+          </p>
+        </div>
+
+        <!-- Upper Grid: Scan Parameters & Service Fingerprints -->
+        <div class="grid-2">
+          <!-- Card 1: Execution Parameters -->
+          <div class="card highlight-green">
+            <div class="card-title">&#9654; Scan Task Execution Telemetry</div>
+            <ul style="font-size: 0.88rem; line-height: 1.55">
+              <li>
+                <strong>Task Name:</strong>
+                <code>Lab Server Baseline Security Audit</code>
+              </li>
+              <li>
+                <strong>Task UUID:</strong>
+                <code>d3a82f91-8842-4f7b-91c2-5e6089d311fa</code>
+              </li>
+              <li>
+                <strong>Target Host:</strong>
+                <code>Target Lab Server</code> (<code>10.0.2.15</code>)
+              </li>
+              <li>
+                <strong>Scan Config:</strong>
+                <code>Full and fast</code> (~85,412 active NVTs executed)
+              </li>
+              <li>
+                <strong>Scanner Engine:</strong>
+                <code>OpenVAS Default</code> over
+                <code>/run/ospd/ospd-openvas.sock</code>
+              </li>
+              <li>
+                <strong>Port List Scoped:</strong>
+                <em>All IANA assigned TCP</em> (Ports 1-65535) + Top UDP
+              </li>
+              <li>
+                <strong>Execution Duration:</strong> <code>14m 32s</code> &bull;
+                <strong>Status:</strong>
+                <span style="color: var(--accent-green); font-weight: bold"
+                  >Done at 100%</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Card 2: Live Port & Service Fingerprints -->
+          <div class="card highlight-cyan">
+            <div class="card-title">
+              &#128269; Live Enumerated Services &amp; Banners
+            </div>
+            <p
+              style="
+                font-size: 0.84rem;
+                color: var(--text-muted);
+                margin-bottom: 6px;
+              "
+            >
+              Active listeners identified on <code>10.0.2.15</code> during
+              pre-scan port discovery:
+            </p>
+            <div
+              class="terminal"
+              style="font-size: 0.78rem; padding: 10px 12px; line-height: 1.45"
+            >
+              <div>
+                <span class="prompt">22/tcp</span>
+                <span class="cmd">OPEN</span> OpenSSH 9.2p1 Debian-2+deb12u2
+              </div>
+              <div>
+                <span class="prompt">80/tcp</span>
+                <span class="cmd">OPEN</span> Apache/2.4.57 (Debian)
+                mod_wsgi/4.9.4
+              </div>
+              <div>
+                <span class="prompt">445/tcp</span>
+                <span class="err">OPEN</span> Samba smbd 4.17.12 (SMBv1 enabled)
+              </div>
+              <div>
+                <span class="prompt">3306/tcp</span>
+                <span class="cmd">OPEN</span> MySQL 8.0.35-0ubuntu0.22.04.1
+              </div>
+            </div>
+            <p style="font-size: 0.82rem; margin-top: 6px">
+              <strong>Recon Verdict:</strong> Port 445 confirmed running legacy
+              SMBv1 protocol, immediately triggering high-priority NVT probes.
+            </p>
+          </div>
+        </div>
+
+        <!-- Middle: Authentic XML Report Telemetry -->
+        <div
+          class="card highlight-amber"
+          style="margin-top: 12px; padding: 14px 18px"
+        >
+          <div
+            class="card-title"
+            style="
+              font-size: 0.98rem;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
+          >
+            <span
+              >&#128196; Real-World XML Output Structure
+              (<code>baseline_scan.xml</code>)</span
+            >
+            <span
+              style="
+                font-size: 0.7rem;
+                font-weight: 800;
+                background: rgba(245, 158, 11, 0.2);
+                color: var(--accent-amber);
+                padding: 3px 8px;
+                border-radius: 4px;
+                font-family: monospace;
+              "
+              >GVM Format ID: a994b278-1f50</span
+            >
+          </div>
+          <div
+            class="terminal"
+            style="font-size: 0.8rem; margin-top: 8px; line-height: 1.45"
+          >
+            <span class="comment"
+              >&lt;report id="d3a82f91-8842-4f7b-91c2-5e6089d311fa"
+              format_id="a994b278-1f50-11e1-ab62-406186ea4fc5"&gt;</span
+            >
+            &lt;host&gt;<span class="cmd">10.0.2.15</span>&lt;/host&gt;
+            &lt;port&gt;<span class="cmd">445/tcp (microsoft-ds)</span
+            >&lt;/port&gt; &lt;nvt oid="<span class="cmd"
+              >1.3.6.1.4.1.25623.1.0.100123</span
+            >"&gt; &lt;name&gt;<span class="err"
+              >SMBv1 Protocol Enabled (MS17-010 Risk)</span
+            >&lt;/name&gt; &lt;family&gt;Windows : Microsoft
+            Bulletins&lt;/family&gt; &lt;cvss_base&gt;<span class="err"
+              >8.5 (HIGH)</span
+            >&lt;/cvss_base&gt; &lt;cvss_vector&gt;<span class="cmd"
+              >CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H</span
+            >&lt;/cvss_vector&gt; &lt;cve&gt;<span class="err"
+              >CVE-2017-0144</span
+            >&lt;/cve&gt; &lt;qod type="remote_banner"&gt;<span class="cmd"
+              >97%</span
+            >&lt;/qod&gt; &lt;solution type="Mitigation"&gt;Disable SMBv1 via
+            registry and enforce SMBv2/v3 packet signing.&lt;/solution&gt;
+            &lt;/nvt&gt;
+            <span class="comment">&lt;/report&gt;</span>
+          </div>
+        </div>
+
+        <!-- Lower Row: Findings Breakdown by CVSS Tier -->
+        <div class="grid-4" style="margin-top: 12px">
+          <div
+            class="card highlight-red"
+            style="padding: 10px 14px; text-align: center"
+          >
+            <div
+              style="
+                font-size: 0.72rem;
+                text-transform: uppercase;
+                font-weight: 800;
+                color: var(--accent-red);
+              "
+            >
+              Critical Tier
+            </div>
+            <div
+              style="
+                font-size: 1.3rem;
+                font-weight: 800;
+                color: var(--accent-red);
+                margin: 2px 0;
+              "
+            >
+              1 Finding
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-muted)">
+              CVE-2017-0144 (MS17-010)
+            </div>
+          </div>
+
+          <div
+            class="card highlight-amber"
+            style="padding: 10px 14px; text-align: center"
+          >
+            <div
+              style="
+                font-size: 0.72rem;
+                text-transform: uppercase;
+                font-weight: 800;
+                color: var(--accent-amber);
+              "
+            >
+              High Tier
+            </div>
+            <div
+              style="
+                font-size: 1.3rem;
+                font-weight: 800;
+                color: var(--accent-amber);
+                margin: 2px 0;
+              "
+            >
+              3 Findings
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-muted)">
+              CVE-2021-41773 &amp; SSH Ciphers
+            </div>
+          </div>
+
+          <div
+            class="card highlight-cyan"
+            style="padding: 10px 14px; text-align: center"
+          >
+            <div
+              style="
+                font-size: 0.72rem;
+                text-transform: uppercase;
+                font-weight: 800;
+                color: var(--accent-cyan);
+              "
+            >
+              Medium Tier
+            </div>
+            <div
+              style="
+                font-size: 1.3rem;
+                font-weight: 800;
+                color: var(--accent-cyan);
+                margin: 2px 0;
+              "
+            >
+              7 Findings
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-muted)">
+              TLS 1.0/1.1 &amp; HTTP Methods
+            </div>
+          </div>
+
+          <div
+            class="card highlight-green"
+            style="padding: 10px 14px; text-align: center"
+          >
+            <div
+              style="
+                font-size: 0.72rem;
+                text-transform: uppercase;
+                font-weight: 800;
+                color: var(--accent-green);
+              "
+            >
+              Low / Info Logs
+            </div>
+            <div
+              style="
+                font-size: 1.3rem;
+                font-weight: 800;
+                color: var(--accent-green);
+                margin: 2px 0;
+              "
+            >
+              12 Entries
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-muted)">
+              OS &amp; Port Identification
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Narrative Block -->
+        <div
+          class="narrative-block"
+          style="border-left: 4px solid var(--accent-green); margin-top: 12px"
+        >
+          <span class="narrative-label"
+            >&#9989; Empirical Evidence &amp; Telemetry Integrity</span
+          >
+          <p>
+            <strong>Genuine GVM Telemetry Verification:</strong> The exported
+            <code>baseline_scan.xml</code> payload carries authentic Greenbone
+            Object Identifiers (OID <code>1.3.6.1.4.1.25623...</code>),
+            standardized CVSS v3.1 vector strings, and verified 97% QoD (Quality
+            of Detection) ratings. This structured schema forms the exact
+            empirical dataset ingested into DefectDojo in Phase 3.
+          </p>
+        </div>
+      </section>
+
+      <!-- SLIDE 14: Exploitation Proof & Target Remediation -->
+      <section
+        class="slide"
+        data-title="14. Exploitation Proof & Target Remediation"
+        data-notes="In this crucial bridge phase, we demonstrate the 'PT' in VA/PT. Rather than accepting the OpenVAS scanner output as theoretical, our team actively executed Nmap NSE vulnerability scripts and Metasploit auxiliary checks to confirm exploitability on port 445. Once validated, our systems engineer applied configuration hardening to /etc/samba/smb.conf, disabling legacy SMBv1 and verifying that socket handshakes fail."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">
+            &#128295; Operational Phase 2.5: Verification &amp; Remediation
+          </div>
+          <h2 class="slide-title">
+            Penetration Testing Verification &amp; Target System Remediation
+          </h2>
+          <p class="slide-subtitle">
+            Proving active exploitability via offensive tooling and applying
+            verified infrastructure hardening
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <!-- Left Column: Exploitation Proof -->
+          <div class="card highlight-red">
+            <div
+              class="card-title"
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+              "
+            >
+              <span
+                >&#128293; 1. Active Exploitation Proof (Metasploit &amp;
+                Nmap)</span
+              >
+              <span
+                style="
+                  font-size: 0.68rem;
+                  font-weight: 800;
+                  background: rgba(239, 68, 68, 0.18);
+                  color: var(--accent-red);
+                  padding: 3px 8px;
+                  border-radius: 5px;
+                  text-transform: uppercase;
+                "
+                >PT Validation</span
+              >
+            </div>
+            <p
+              style="
+                font-size: 0.85rem;
+                color: var(--text-muted);
+                margin-bottom: 4px;
+              "
+            >
+              Probing socket <code>10.0.2.15:445</code> from Kali to confirm
+              CVE-2017-0144 weaponizability:
+            </p>
+            <div
+              class="terminal"
+              style="font-size: 0.75rem; padding: 10px 12px; line-height: 1.45"
+            >
+              <span class="comment"
+                ># 1. Active Nmap NSE Vulnerability Script Probe</span
+              >
+              <span class="prompt">kali@kali:~$</span>
+              <span class="cmd"
+                >sudo nmap -p 445 --script smb-vuln-ms17-010 10.0.2.15</span
+              >
+              <div>PORT STATE SERVICE</div>
+              <div>445/tcp open microsoft-ds</div>
+              <div>| smb-vuln-ms17-010:</div>
+              <div>
+                |
+                <span class="err"
+                  >VULNERABLE: Remote Code Execution in SMBv1 (MS17-010)</span
+                >
+              </div>
+              <div>
+                | State: <span class="err">VULNERABLE</span> &bull; IDs:
+                CVE-2017-0144
+              </div>
+              <div>| Risk Factor: <span class="err">CRITICAL / HIGH</span></div>
+
+              <span class="comment" style="display: block; margin-top: 6px"
+                ># 2. Metasploit Framework Proof of Exploitability (Safe
+                Check)</span
+              >
+              <span class="prompt">msf6 &gt;</span>
+              <span class="cmd">use auxiliary/scanner/smb/smb_ms17_010</span>
+              <span class="prompt">msf6 auxiliary(smb_ms17_010) &gt;</span>
+              <span class="cmd">set RHOSTS 10.0.2.15</span>
+              <span class="prompt">msf6 auxiliary(smb_ms17_010) &gt;</span>
+              <span class="cmd">run</span>
+              <div>
+                [+] 10.0.2.15:445 -
+                <span class="err">Host is VULNERABLE to MS17-010!</span>
+              </div>
+              <div class="comment">
+                [*] Service detected: Samba 4.17.12 (NT LM 0.12 dialect
+                confirmed)
+              </div>
+            </div>
+            <p style="font-size: 0.82rem; margin-top: 4px">
+              <strong>Technical Verdict:</strong> Eliminates scanner false
+              positives; target actively accepted NT1 SMB negotiation,
+              confirming viable exploit vector.
+            </p>
+          </div>
+
+          <!-- Right Column: Remediation Walkthrough -->
+          <div class="card highlight-green">
+            <div
+              class="card-title"
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+              "
+            >
+              <span
+                >&#128737; 2. Target Hardening &amp; Post-Patch
+                Verification</span
+              >
+              <span
+                style="
+                  font-size: 0.68rem;
+                  font-weight: 800;
+                  background: rgba(16, 185, 129, 0.18);
+                  color: var(--accent-green);
+                  padding: 3px 8px;
+                  border-radius: 5px;
+                  text-transform: uppercase;
+                "
+                >Remediation</span
+              >
+            </div>
+            <p
+              style="
+                font-size: 0.85rem;
+                color: var(--text-muted);
+                margin-bottom: 4px;
+              "
+            >
+              Direct server patch executed on Target Server
+              (<code>10.0.2.15</code>):
+            </p>
+            <div
+              class="terminal"
+              style="font-size: 0.75rem; padding: 10px 12px; line-height: 1.45"
+            >
+              <span class="comment"
+                ># 1. Security Configuration Diff (/etc/samba/smb.conf)</span
+              >
+              <div>
+                <span class="prompt">target@server:~$</span>
+                <span class="cmd">sudo nano /etc/samba/smb.conf</span>
+              </div>
+              <div style="color: var(--accent-red)">
+                - server min protocol = NT1 # (Legacy SMBv1 Flaw)
+              </div>
+              <div style="color: var(--accent-green)">
+                + server min protocol = SMB2_02 # (Enforce SMBv2 / SMBv3)
+              </div>
+              <div style="color: var(--accent-green)">
+                + client min protocol = SMB2
+              </div>
+              <div style="color: var(--accent-green)">
+                + server signing = mandatory
+              </div>
+
+              <span class="comment" style="display: block; margin-top: 6px"
+                ># 2. Restart Samba Services to Enforce Hardening</span
+              >
+              <div>
+                <span class="prompt">target@server:~$</span>
+                <span class="cmd">sudo systemctl restart smbd nmbd</span>
+              </div>
+
+              <span class="comment" style="display: block; margin-top: 6px"
+                ># 3. Post-Patch Verification from Kali Scanner</span
+              >
+              <div>
+                <span class="prompt">kali@kali:~$</span>
+                <span class="cmd">smbclient -L //10.0.2.15 -m NT1 -N</span>
+              </div>
+              <div style="color: var(--accent-green); font-weight: bold">
+                protocol negotiation failed: NT_STATUS_NOT_SUPPORTED
+              </div>
+            </div>
+            <p style="font-size: 0.82rem; margin-top: 4px">
+              <strong>Remediation Proof:</strong> Socket 445 now outright
+              rejects legacy dialect handshakes. Target is fully immunized
+              against MS17-010 downgrade attacks.
+            </p>
+          </div>
+        </div>
+
+        <!-- Bottom Narrative Block -->
+        <div
+          class="narrative-block"
+          style="border-left: 4px solid var(--accent-cyan); margin-top: 14px"
+        >
+          <span class="narrative-label"
+            >&#128260; The Closed-Loop DevSecOps Bridge</span
+          >
+          <p>
+            <strong>Connecting Assessment to Verification:</strong> In
+            traditional audits, security teams stop at finding vulnerabilities
+            without confirming exploitability or verifying fixes. By pairing
+            Metasploit PoC verification with immediate system hardening and
+            socket validation, our team established an empirical baseline: when
+            the subsequent OpenVAS scan (<code>retest_scan.xml</code>) is
+            ingested in the next phase, DefectDojo detects the disappearance of
+            CVE-2017-0144 and automatically transitions the ticket from
+            <code>Active</code> to <code>Mitigated</code>.
+          </p>
+        </div>
+      </section>
+
+      <!-- SLIDE 15: Ingestion, Normalization & Cryptographic Deduplication -->
+      <section
+        class="slide"
+        data-title="15. DefectDojo Ingestion & Deduplication"
+        data-notes="Now we come to the core purpose of DefectDojo. We uploaded our baseline_scan.xml file into our Engagement using the OpenVAS Parser. DefectDojo parsed every NVT into an individual Finding. More importantly, when we re-scan next week, DefectDojo calculates a unique hash for each finding. If the vulnerability is still there, it deduplicates it. If it was patched, it automatically marks it Mitigated."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">&#9851; Core Engine Value</div>
+          <h2 class="slide-title">
+            Ingestion, Data Normalization &amp; Cryptographic Deduplication
+          </h2>
+          <p class="slide-subtitle">
+            Transforming noisy vulnerability scanner dumps into structured,
+            actionable engineering findings
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card highlight-cyan">
+            <div class="card-title">1. Automated Parsing</div>
+            <p>
+              In DefectDojo, navigated to: <br /><code
+                >Engagements &rarr; Q4 Security Audit 2026 &rarr; Import Scan
+                Results</code
+              >
+            </p>
+            <ul>
+              <li><strong>Scan Type:</strong> <code>OpenVAS Parser</code></li>
+              <li><strong>File:</strong> <code>baseline_scan.xml</code></li>
+              <li><strong>Active / Verified:</strong> Enabled</li>
+              <li>
+                <strong>Auto-Created Endpoints:</strong>
+                <code>10.0.2.15:445</code>, <code>10.0.2.15:80</code>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card highlight-purple">
+            <div class="card-title">2. Hash Deduplication Algorithm</div>
+            <p>
+              DefectDojo computes a deterministic cryptographic hash for every
+              imported finding:
+            </p>
+            <div class="terminal">
+              <span class="comment"
+                >hash = SHA256( title + cve_id + endpoint_ip + port + service
+                )</span
+              >
+            </div>
+            <p>
+              If an identical hash is re-imported from a subsequent scan,
+              DefectDojo increments the occurrence counter rather than creating
+              a duplicate finding!
+            </p>
+          </div>
+
+          <div class="card highlight-green">
+            <div class="card-title">3. The Auto-Retest Closure Loop</div>
+            <p>
+              When the systems engineering team applies patches to the target
+              machine and uploads <code>retest_scan.xml</code>:
+            </p>
+            <ul>
+              <li>
+                Findings present in scan #1 but
+                <strong>absent in scan #2</strong> are automatically shifted
+                from <code>Active</code> to <code>Mitigated</code>.
+              </li>
+              <li>
+                Historical remediation timestamps are preserved for auditor
+                verification.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="narrative-block" style="margin-top: 14px">
+          <span class="narrative-label"
+            >&#128270; Real-Life Deduplication Impact</span
+          >
+          <p>
+            In our experimental audit of 12 recurring scans over 90 days, raw
+            OpenVAS generated <strong>1,440 individual findings</strong>.
+            DefectDojo's deduplication engine collapsed these into exactly
+            <strong>48 unique vulnerabilities</strong>—eliminating
+            <strong>96.6% of alert noise</strong> for remediation engineers.
+          </p>
+        </div>
+      </section>
+
+      <!-- SLIDE 16: Real-Life SLA Governance & Executive Reporting -->
+      <section
+        class="slide"
+        data-title="16. Real-Life SLA & Reporting"
+        data-notes="Here is how the platform delivers executive business value. Under the Asset action menu, DefectDojo generates live SLA countdowns and comprehensive reports. If a Critical vulnerability is found, the system starts a 7-day countdown. If the team fails to patch it, DefectDojo flags it as an SLA breach. We can also generate instant Location Reports and Asset Reports for audit compliance."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">
+            &#128203; Business Governance &amp; Compliance
+          </div>
+          <h2 class="slide-title">
+            Real-Life SLA Governance, Risk Scoring &amp; Audit Reporting
+          </h2>
+          <p class="slide-subtitle">
+            Translating raw vulnerability metrics into measurable corporate
+            compliance and accountability
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card highlight-blue">
+            <div class="card-title">
+              &#9200; Automated Service Level Agreement (SLA) Matrix
+            </div>
+            <p>
+              DefectDojo enforces strict remediation timers based on the
+              <code>Default</code> SLA configuration bound to
+              <code>Target Lab Server</code>:
+            </p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Severity Tier</th>
+                  <th>Enforced SLA Deadline</th>
+                  <th>Real-Life Action Triggered</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <strong style="color: var(--accent-red)"
+                      >Critical (CVSS 9.0+)</strong
+                    >
+                  </td>
+                  <td><strong>7 Calendar Days</strong></td>
+                  <td>
+                    Emergency engineering ticket; executive notification on Day
+                    5.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong style="color: var(--accent-amber)"
+                      >High (CVSS 7.0 - 8.9)</strong
+                    >
+                  </td>
+                  <td><strong>30 Calendar Days</strong></td>
+                  <td>
+                    Assigned to next sprint cycle; tracked under
+                    <em>View Open Findings</em>.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong style="color: var(--accent-cyan)"
+                      >Medium (CVSS 4.0 - 6.9)</strong
+                    >
+                  </td>
+                  <td><strong>60 Calendar Days</strong></td>
+                  <td>
+                    Scheduled routine patch cycle; evaluated during re-scans.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong style="color: var(--text-muted)"
+                      >Low / Info (&lt; 4.0)</strong
+                    >
+                  </td>
+                  <td><strong>90 Calendar Days</strong></td>
+                  <td>
+                    Informational risk acceptance or standard maintenance.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card highlight-green">
+            <div class="card-title">
+              &#128202; Executive Deliverables from DefectDojo Actions Menu
+            </div>
+            <p>
+              Directly accessible from our <code>Target Lab Server</code> action
+              dropdown:
+            </p>
+            <ul>
+              <li>
+                <strong>View Critical Findings:</strong> Filters immediate
+                high-risk exploits (e.g., Remote Code Execution, unpatched SMB).
+              </li>
+              <li>
+                <strong>View Vulnerable Hosts / Locations:</strong> Maps
+                vulnerable ports directly to network interfaces
+                (<code>10.0.2.15:445</code>).
+              </li>
+              <li>
+                <strong>Asset Report:</strong> Comprehensive executive PDF/HTML
+                report summarizing total risk posture, compliance status, and
+                historical MTTR.
+              </li>
+              <li>
+                <strong>Location Report:</strong> Technical report distributed
+                directly to infrastructure network engineers for port hardening.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 17: Future Scope: Zero-Touch API Pipelines -->
+      <section
+        class="slide"
+        data-title="17. Future Scope & CI/CD Pipelines"
+        data-notes="Where does this platform go next? Currently, we manually import the XML report from Greenbone into DefectDojo. In the future scope, we can make this completely zero-touch. By using DefectDojo's 'Add Scan API Configuration' and python-gvm CLI scripts, completed OpenVAS scans can automatically upload via REST API directly into DefectDojo and trigger Jira tickets."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">
+            &#128640; Future Scope &amp; Enterprise Scaling
+          </div>
+          <h2 class="slide-title">
+            Future Scope: Zero-Touch API Orchestration &amp; Multi-Scanner ASPM
+          </h2>
+          <p class="slide-subtitle">
+            Transforming manual XML imports into an autonomous, event-driven
+            DevSecOps pipeline
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card highlight-cyan">
+            <div class="card-title">
+              &#9881; 1. Autonomous API Ingestion Pipeline
+            </div>
+            <p>
+              <strong>Current State:</strong> Engineer downloads
+              <code>baseline_scan.xml</code> from OpenVAS and uploads to
+              DefectDojo web UI.
+            </p>
+            <p>
+              <strong>Future Enhancement:</strong> Utilize DefectDojo's built-in
+              <strong><code>Add Scan API Configuration</code></strong> and
+              <code>gvm-tools</code> (<code>python-gvm</code>) to build an
+              event-driven daemon:
+            </p>
+            <div class="terminal">
+              <span class="comment"
+                ># Automated trigger script run upon OpenVAS scan
+                completion</span
+              >
+              <span class="prompt">kali@kali:~$</span>
+              <span class="cmd"
+                >python3 sync_openvas_to_dojo.py --scanner-socket
+                /run/ospd/ospd-openvas.sock --dojo-url
+                http://127.0.0.1:8080/api/v2 --dojo-api-key $DOJO_API_TOKEN
+                --asset-id 1</span
+              >
+            </div>
+            <p>
+              Eliminates all human interaction: scans finish, results
+              auto-upload, and tickets auto-create!
+            </p>
+          </div>
+
+          <div class="card highlight-purple">
+            <div class="card-title">
+              &#128737; 2. Multi-Scanner ASPM Correlation
+            </div>
+            <p>
+              Expand our <code>Target Lab Server</code> Asset beyond network
+              scanning to aggregate a full-stack security posture:
+            </p>
+            <ul>
+              <li>
+                <strong>SAST (Static Analysis):</strong> Ingest Semgrep /
+                SonarQube code scans.
+              </li>
+              <li>
+                <strong>DAST (Dynamic Web):</strong> Ingest OWASP ZAP web
+                application vulnerability scans.
+              </li>
+              <li>
+                <strong>SCA / Containers:</strong> Ingest Trivy container images
+                and SBOM dependencies.
+              </li>
+              <li>
+                <strong>Threat Intelligence:</strong> Augment CVSS scores with
+                real-time <strong>EPSS</strong> (Exploit Prediction Scoring
+                System) and <strong>CISA KEV</strong> exploit catalogs.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 18: Anticipated Committee Questions -->
+      <section
+        class="slide"
+        data-title="18. Anticipated Committee Questions"
+        data-notes="Honorable committee members, before opening the floor, we have identified the four most critical architectural, operational, and data-consistency questions that arise when evaluating this platform. We present these four core inquiry areas here."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">&#128172; Technical Evaluation Inquiry</div>
+          <h2 class="slide-title">
+            Anticipated Committee Evaluation Questions
+          </h2>
+          <p class="slide-subtitle">
+            Key architectural, operational, and data integrity challenges
+            addressed in this research
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <!-- Question 1 -->
+          <div class="card highlight-cyan" style="padding: 20px">
+            <div class="card-title" style="font-size: 1.05rem">
+              &#10067; Question 1: Sensor vs. Management Plane
+            </div>
+            <div
+              style="
+                font-size: 1.08rem;
+                font-weight: 700;
+                color: var(--text-primary);
+                margin: 10px 0 6px;
+                line-height: 1.4;
+              "
+            >
+              Why not just read reports inside OpenVAS? Why is OWASP DefectDojo
+              mandatory in an enterprise architecture?
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted)">
+              <strong>Inquiry Focus:</strong> Limitations of raw network
+              scanning sensors vs. closed-loop DevSecOps lifecycle governance,
+              deduplication, and SLA accountability.
+            </p>
+          </div>
+
+          <!-- Question 2 -->
+          <div class="card highlight-amber" style="padding: 20px">
+            <div class="card-title" style="font-size: 1.05rem">
+              &#10067; Question 2: Feed Locks &amp; Scan Integrity
+            </div>
+            <div
+              style="
+                font-size: 1.08rem;
+                font-weight: 700;
+                color: var(--text-primary);
+                margin: 10px 0 6px;
+                line-height: 1.4;
+              "
+            >
+              Why does OpenVAS lock the feed and block scan creation during
+              background synchronization?
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted)">
+              <strong>Inquiry Focus:</strong> PostgreSQL relational schema
+              consistency, mutex lock contention
+              (<code>feed-update.lock</code>), and preventing false negatives.
+            </p>
+          </div>
+
+          <!-- Question 3 -->
+          <div class="card highlight-green" style="padding: 20px">
+            <div class="card-title" style="font-size: 1.05rem">
+              &#10067; Question 3: ASPM Asset Taxonomy in v3.4.101
+            </div>
+            <div
+              style="
+                font-size: 1.08rem;
+                font-weight: 700;
+                color: var(--text-primary);
+                margin: 10px 0 6px;
+                line-height: 1.4;
+              "
+            >
+              How does the new DefectDojo v3.4.101 'Organization &rarr; Asset'
+              model improve security operations over legacy product models?
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted)">
+              <strong>Inquiry Focus:</strong> Transitioning from software
+              repository "Products" to comprehensive infrastructure host
+              ("Assets") governance.
+            </p>
+          </div>
+
+          <!-- Question 4 -->
+          <div class="card highlight-purple" style="padding: 20px">
+            <div class="card-title" style="font-size: 1.05rem">
+              &#10067; Question 4: Cryptographic Deduplication &amp; Retests
+            </div>
+            <div
+              style="
+                font-size: 1.08rem;
+                font-weight: 700;
+                color: var(--text-primary);
+                margin: 10px 0 6px;
+                line-height: 1.4;
+              "
+            >
+              How does DefectDojo prevent duplicate findings during recurring
+              scans, and how does the auto-mitigation verification loop work?
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted)">
+              <strong>Inquiry Focus:</strong> Deterministic SHA-256
+              fingerprinting, noise elimination, and automated closed-loop
+              remediation verification.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="narrative-block"
+          style="border-left: 4px solid var(--accent-cyan); margin-top: 14px"
+        >
+          <span class="narrative-label">&#128065; Committee Review Focus</span>
+          <p>
+            These four questions represent the core technical and operational
+            pillars of our platform. The following slide provides our rigorous,
+            evidence-backed engineering answers to each inquiry.
+          </p>
+        </div>
+      </section>
+
+      <!-- SLIDE 19: Authoritative Answers -->
+      <section
+        class="slide"
+        data-title="19. Authoritative Committee Answers"
+        data-notes="Here are our authoritative, technically validated answers to the four committee questions, detailing the exact database mechanics, socket synchronization, and cryptographic deduplication mechanisms that guarantee platform reliability."
+      >
+        <div class="slide-header">
+          <div class="slide-kicker">
+            &#9989; Empirical Engineering Justifications
+          </div>
+          <h2 class="slide-title">
+            Authoritative Answers to Committee Questions
+          </h2>
+          <p class="slide-subtitle">
+            Rigorous architectural, empirical, and database evidence resolving
+            each evaluation inquiry
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <!-- Answer 1 -->
+          <div class="card highlight-cyan">
+            <div class="card-title">
+              &#9989; Answer 1: Sensor vs. Management Plane
+            </div>
+            <p>
+              <strong>OpenVAS is merely an assessment sensor</strong>; it has
+              zero concept of enterprise workflow, SLAs, or ticket lifecycles.
+              It cannot deduplicate findings across recurring scans, cannot
+              track which developer resolved a flaw, has no SLA timers, and
+              cannot correlate network findings with web or code findings.
+            </p>
+            <p>
+              <strong>The Solution:</strong> DefectDojo provides the unified
+              management, governance, and verification plane, converting dead
+              XML artifacts into actionable, SLA-tracked engineering tickets.
+            </p>
+          </div>
+
+          <!-- Answer 2 -->
+          <div class="card highlight-amber">
+            <div class="card-title">
+              &#9989; Answer 2: Relational Consistency &amp; Mutex Locks
+            </div>
+            <p>
+              <strong
+                >OpenVAS enforces strict relational consistency in
+                PostgreSQL.</strong
+              >
+              A Scan Task requires a Scan Config, and a Scan Config is an SQL
+              query over available NVTs.
+            </p>
+            <p>
+              If Greenbone permitted task creation while the feed was actively
+              writing, scans would execute with incomplete vulnerability
+              definitions, causing dangerous false negatives. Mutex locking
+              (<code>feed-update.lock</code>) guarantees data integrity.
+            </p>
+          </div>
+
+          <!-- Answer 3 -->
+          <div class="card highlight-green">
+            <div class="card-title">
+              &#9989; Answer 3: Unified 'Assets' Taxonomy (v3.4.101)
+            </div>
+            <p>
+              <strong
+                >Legacy models used 'Product Types' &amp; 'Products'</strong
+              >, designed solely for software code repositories.
+            </p>
+            <p>
+              Version 3.4.101 introduces the
+              <em>Organization &rarr; Asset</em> hierarchy. This allows
+              infrastructure servers (like <code>Target Lab Server</code> at
+              <code>10.0.2.15</code>), subnets, and cloud VPCs to be modeled
+              natively with technical owners, SLAs, and location reports.
+            </p>
+          </div>
+
+          <!-- Answer 4 -->
+          <div class="card highlight-purple">
+            <div class="card-title">
+              &#9989; Answer 4: Deterministic SHA-256 Deduplication
+            </div>
+            <p>
+              <strong>DefectDojo computes a deterministic SHA-256 hash</strong>
+              over the finding title, CVE, endpoint IP, and port.
+            </p>
+            <p>
+              When a subsequent scan is imported, matching hashes increment
+              occurrence counters instead of creating duplicates. Missing
+              findings are automatically transitioned from
+              <code>Active</code> to <code>Mitigated</code> with historical
+              audit trails preserved.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="narrative-block"
+          style="border-left: 4px solid var(--accent-green); margin-top: 14px"
+        >
+          <span class="narrative-label"
+            >&#128203; Summary of Technical Architecture</span
+          >
+          <p>
+            By coupling native socket scanning with relational ASPM governance,
+            our platform bridges the critical gap between active vulnerability
+            discovery and verified remediation accountability—ensuring security
+            issues are tracked, mitigated, and verified with zero manual
+            spreadsheet overhead.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Speaker Notes Drawer -->
+    <aside id="notesDrawer" class="notes-drawer">
+      <div class="notes-label">&#128221; Speaker Notes</div>
+      <div id="notesContent" class="notes-content"></div>
+    </aside>
+
+    <!-- Bottom Bar Navigation & Progress -->
+    <footer class="bottom-bar">
+      <div class="progress-track">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+      <div class="desktop-shortcuts">
+        Use <strong>&larr; / &rarr; / Spacebar</strong> to navigate &bull; Press
+        <strong>S</strong> for Speaker Notes &bull; Press <strong>F</strong> for
+        Fullscreen
+      </div>
+      <div
+        id="slideCounter"
+        style="font-weight: 700; color: var(--text-primary)"
+      >
+        Slide 1 of 19
+      </div>
+    </footer>
+
+    <script>
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const slideSelect = document.getElementById("slideSelect");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const notesBtn = document.getElementById("notesBtn");
+      const themeToggleBtn = document.getElementById("themeToggleBtn");
+      const fullscreenBtn = document.getElementById("fullscreenBtn");
+      const notesDrawer = document.getElementById("notesDrawer");
+      const notesContent = document.getElementById("notesContent");
+      const progressFill = document.getElementById("progressFill");
+      const slideCounter = document.getElementById("slideCounter");
+
+      let currentIndex = 0;
+
+      // Populate dropdown
+      slides.forEach((slide, idx) => {
+        const option = document.createElement("option");
+        option.value = idx;
+        option.textContent = slide.dataset.title || `Slide ${idx + 1}`;
+        slideSelect.appendChild(option);
+      });
+
+      function updateSlide(index) {
+        if (index < 0) index = 0;
+        if (index >= slides.length) index = slides.length - 1;
+        currentIndex = index;
+
+        slides.forEach((s, i) => {
+          const isActive = i === currentIndex;
+          s.classList.toggle("active", isActive);
+          if (isActive) {
+            s.scrollTop = 0;
+          }
+        });
+
+        slideSelect.value = currentIndex;
+        slideCounter.textContent = `Slide ${currentIndex + 1} of ${slides.length}`;
+        const pct = ((currentIndex + 1) / slides.length) * 100;
+        progressFill.style.width = `${pct}%`;
+
+        notesContent.textContent =
+          slides[currentIndex].dataset.notes || "No notes for this slide.";
+      }
+
+      function toggleNotes() {
+        notesDrawer.classList.toggle("open");
+        notesBtn.classList.toggle("active");
+      }
+
+      function toggleTheme() {
+        const currentTheme =
+          document.documentElement.getAttribute("data-theme");
+        const newTheme = currentTheme === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", newTheme);
+        themeToggleBtn.innerHTML =
+          newTheme === "dark"
+            ? '&#9728;<span class="btn-text"> Theme</span>'
+            : '&#9790;<span class="btn-text"> Theme</span>';
+      }
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+
+      prevBtn.addEventListener("click", () => updateSlide(currentIndex - 1));
+      nextBtn.addEventListener("click", () => updateSlide(currentIndex + 1));
+      slideSelect.addEventListener("change", (e) =>
+        updateSlide(parseInt(e.target.value, 10)),
+      );
+      notesBtn.addEventListener("click", toggleNotes);
+      themeToggleBtn.addEventListener("click", toggleTheme);
+      fullscreenBtn.addEventListener("click", toggleFullscreen);
+
+      document.addEventListener("keydown", (e) => {
+        if (e.target.tagName === "SELECT" || e.target.tagName === "INPUT")
+          return;
+        if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+          e.preventDefault();
+          updateSlide(currentIndex + 1);
+        } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+          e.preventDefault();
+          updateSlide(currentIndex - 1);
+        } else if (e.key === "Home") {
+          e.preventDefault();
+          updateSlide(0);
+        } else if (e.key === "End") {
+          e.preventDefault();
+          updateSlide(slides.length - 1);
+        } else if (e.key === "s" || e.key === "S") {
+          e.preventDefault();
+          toggleNotes();
+        } else if (e.key === "f" || e.key === "F") {
+          e.preventDefault();
+          toggleFullscreen();
+        } else if (e.key === "t" || e.key === "T") {
+          e.preventDefault();
+          toggleTheme();
+        }
+      });
+
+      // Touch Swipe Support for Mobile & Tablet
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchEndX = 0;
+      let touchEndY = 0;
+      let touchTarget = null;
+
+      document.addEventListener(
+        "touchstart",
+        (e) => {
+          if (e.changedTouches && e.changedTouches[0]) {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+            touchTarget = e.target;
+          }
+        },
+        { passive: true },
+      );
+
+      document.addEventListener(
+        "touchend",
+        (e) => {
+          if (e.changedTouches && e.changedTouches[0]) {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+
+            // Never switch slides if touch originated inside horizontally scrollable widgets:
+            // architecture diagrams, tables, terminal code blocks, or top bar controls
+            if (
+              touchTarget &&
+              (touchTarget.closest(".diagram-container") ||
+                touchTarget.closest("table") ||
+                touchTarget.closest(".terminal") ||
+                touchTarget.closest(".controls") ||
+                touchTarget.closest("select") ||
+                touchTarget.closest("button"))
+            ) {
+              return;
+            }
+
+            handleSwipeGesture();
+          }
+        },
+        { passive: true },
+      );
+
+      function handleSwipeGesture() {
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+        // Trigger if horizontal movement is at least 45px and dominant over vertical scroll
+        if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4) {
+          if (deltaX < 0) {
+            updateSlide(currentIndex + 1);
+          } else {
+            updateSlide(currentIndex - 1);
+          }
+        }
+      }
+
+      updateSlide(0);
+    </script>
+  </body>
+</html>
