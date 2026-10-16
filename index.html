@@ -979,27 +979,312 @@
       }
 
       @media print {
-        body {
-          overflow: visible;
-          height: auto;
+        @page {
+          size: A4 landscape;
+          margin: 6mm 8mm;
         }
+
+        :root,
+        :root[data-theme="dark"],
+        :root[data-theme="light"] {
+          --bg-primary: #ffffff !important;
+          --bg-secondary: #f8fafc !important;
+          --bg-card: #f8fafc !important;
+          --bg-card-hover: #f1f5f9 !important;
+          --text-primary: #0f172a !important;
+          --text-secondary: #334155 !important;
+          --text-muted: #64748b !important;
+          --border-color: #cbd5e1 !important;
+          --code-bg: #0f172a !important;
+          --card-shadow: none !important;
+        }
+
+        html,
+        body {
+          background: #ffffff !important;
+          color: #0f172a !important;
+          font-size: 11px !important;
+          width: 100% !important;
+          height: auto !important;
+          overflow: visible !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+
+        /* Hide Interactive Shell Elements */
         .top-bar,
         .bottom-bar,
-        .notes-drawer {
+        .notes-drawer,
+        .diagram-scroll-hint,
+        .desktop-shortcuts {
           display: none !important;
         }
+
         .viewport {
-          display: block;
-          height: auto;
+          display: block !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          width: 100% !important;
+          height: auto !important;
+          overflow: visible !important;
         }
+
+        /* Slide Layout: Exactly 1 Page Per Slide in Landscape */
         .slide {
-          position: relative;
+          position: relative !important;
+          display: flex !important;
+          flex-direction: column !important;
           opacity: 1 !important;
           transform: none !important;
-          page-break-after: always;
-          height: auto;
-          min-height: 96vh;
-          margin-bottom: 24px;
+          width: 100% !important;
+          max-width: 100% !important;
+          height: 185mm !important;
+          max-height: 188mm !important;
+          min-height: 175mm !important;
+          padding: 6mm 8mm !important;
+          margin: 0 !important;
+          background: #ffffff !important;
+          border: 1px solid #cbd5e1 !important;
+          border-radius: 8px !important;
+          box-shadow: none !important;
+          box-sizing: border-box !important;
+          page-break-before: always !important;
+          break-before: page !important;
+          page-break-after: always !important;
+          break-after: page !important;
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+          overflow: hidden !important;
+        }
+
+        .slide:first-of-type {
+          page-break-before: avoid !important;
+          break-before: avoid !important;
+        }
+
+        /* Typography & Header Scaling */
+        .slide-header {
+          margin-bottom: 6px !important;
+          padding-bottom: 4px !important;
+          border-bottom: 1.5px solid #cbd5e1 !important;
+          flex-shrink: 0 !important;
+        }
+
+        .slide-kicker {
+          font-size: 0.76rem !important;
+          margin-bottom: 2px !important;
+          letter-spacing: 0.8px !important;
+          color: #0284c7 !important;
+          font-weight: 800 !important;
+        }
+
+        .slide-title {
+          font-size: 1.35rem !important;
+          line-height: 1.2 !important;
+          color: #0f172a !important;
+          font-weight: 800 !important;
+          margin: 0 !important;
+        }
+
+        .slide-subtitle {
+          font-size: 0.82rem !important;
+          line-height: 1.3 !important;
+          color: #475569 !important;
+          margin-top: 2px !important;
+        }
+
+        /* Cards & Content Containers */
+        .grid-2,
+        .grid-3,
+        .grid-4,
+        .diff-container,
+        .member-grid {
+          gap: 8px !important;
+          margin-top: 6px !important;
+          flex: 1 !important;
+        }
+
+        .card {
+          padding: 8px 12px !important;
+          border-radius: 6px !important;
+          border: 1px solid #cbd5e1 !important;
+          background: #f8fafc !important;
+          box-shadow: none !important;
+          gap: 5px !important;
+          break-inside: avoid !important;
+          page-break-inside: avoid !important;
+        }
+
+        .card-title {
+          font-size: 0.92rem !important;
+          margin-bottom: 3px !important;
+          color: #0f172a !important;
+          font-weight: 700 !important;
+        }
+
+        .card p,
+        .card li,
+        li {
+          font-size: 0.75rem !important;
+          line-height: 1.32 !important;
+          color: #1e293b !important;
+        }
+
+        .card ul,
+        ul {
+          padding-left: 16px !important;
+          gap: 3px !important;
+          margin: 0 !important;
+        }
+
+        .card li strong,
+        li strong {
+          color: #0f172a !important;
+        }
+
+        /* Slide 3 Architecture Diagram */
+        .diagram-container {
+          min-height: 0 !important;
+          height: auto !important;
+          max-height: 132mm !important;
+          padding: 6px 10px !important;
+          margin-top: 4px !important;
+          border: 1px solid #cbd5e1 !important;
+          background: #ffffff !important;
+          box-shadow: none !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          flex: 1 !important;
+        }
+
+        .diagram-container svg {
+          width: 100% !important;
+          max-width: 100% !important;
+          height: auto !important;
+          max-height: 124mm !important;
+          display: block !important;
+        }
+
+        /* Slide 1 Member Grid */
+        .member-grid {
+          grid-template-columns: repeat(3, 1fr) !important;
+          gap: 8px !important;
+          margin-top: 10px !important;
+        }
+
+        .member-card {
+          padding: 8px 10px !important;
+          gap: 10px !important;
+          border: 1px solid #cbd5e1 !important;
+          border-radius: 6px !important;
+          background: #f8fafc !important;
+          box-shadow: none !important;
+        }
+
+        .member-avatar {
+          width: 32px !important;
+          height: 32px !important;
+          font-size: 0.85rem !important;
+        }
+
+        .member-info h4 {
+          font-size: 0.85rem !important;
+          margin: 0 !important;
+          color: #0f172a !important;
+        }
+
+        .member-info p {
+          font-size: 0.7rem !important;
+          margin: 0 !important;
+          color: #64748b !important;
+        }
+
+        /* Tables & Technical Matrices */
+        table {
+          width: 100% !important;
+          border: 1px solid #cbd5e1 !important;
+          border-radius: 6px !important;
+          background: #ffffff !important;
+          margin-top: 4px !important;
+          box-shadow: none !important;
+        }
+
+        th {
+          padding: 4px 6px !important;
+          font-size: 0.72rem !important;
+          background: #f1f5f9 !important;
+          color: #0f172a !important;
+          border-bottom: 1.5px solid #cbd5e1 !important;
+        }
+
+        td {
+          padding: 4px 6px !important;
+          font-size: 0.7rem !important;
+          line-height: 1.25 !important;
+          color: #1e293b !important;
+          border-bottom: 1px solid #e2e8f0 !important;
+        }
+
+        /* Terminal and Code Snippets */
+        .terminal {
+          padding: 6px 10px !important;
+          font-size: 0.68rem !important;
+          line-height: 1.3 !important;
+          border-radius: 6px !important;
+          border: 1px solid #cbd5e1 !important;
+          background: #0f172a !important;
+          color: #e2e8f0 !important;
+          max-height: none !important;
+          overflow: visible !important;
+          margin-top: 4px !important;
+        }
+
+        code {
+          font-size: 0.72rem !important;
+          padding: 1px 4px !important;
+          border-radius: 3px !important;
+        }
+
+        /* Diff Containers & Narrative Blocks */
+        .diff-container {
+          gap: 8px !important;
+          margin: 4px 0 !important;
+        }
+
+        .diff-box {
+          padding: 6px 10px !important;
+          gap: 4px !important;
+          border-radius: 6px !important;
+        }
+
+        .diff-header {
+          font-size: 0.78rem !important;
+        }
+
+        .diff-box p,
+        .diff-box li {
+          font-size: 0.7rem !important;
+          line-height: 1.25 !important;
+        }
+
+        .narrative-block {
+          padding: 6px 10px !important;
+          margin-bottom: 6px !important;
+          gap: 3px !important;
+          border: 1px solid #cbd5e1 !important;
+          border-radius: 6px !important;
+          background: #f8fafc !important;
+        }
+
+        .narrative-label {
+          font-size: 0.72rem !important;
+        }
+
+        .narrative-block p {
+          font-size: 0.72rem !important;
+          line-height: 1.25 !important;
+          color: #1e293b !important;
         }
       }
     </style>
