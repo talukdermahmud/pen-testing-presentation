@@ -393,19 +393,19 @@
         background: var(--bg-secondary);
         border: 1px solid var(--border-color);
         border-radius: 14px;
-        padding: 24px 28px;
+        padding: 12px 16px;
         display: flex;
         align-items: center;
         justify-content: center;
         box-shadow: var(--card-shadow);
         flex: 1;
-        min-height: 460px;
-        margin-top: 10px;
+        min-height: 520px;
+        margin-top: 8px;
       }
 
       .diagram-container svg {
         width: 100%;
-        max-width: 1260px;
+        max-width: 100%;
         height: auto;
         display: block;
       }
@@ -1228,12 +1228,12 @@
           </p>
         </div>
 
-        <div class="grid-2" style="margin-top: 12px">
+        <div class="grid-2" style="margin-top: 10px">
           <!-- Column 1: Core Project Objectives -->
-          <div class="card highlight-cyan" style="padding: 24px 28px">
+          <div class="card highlight-cyan" style="padding: 20px 24px">
             <div
               class="card-title"
-              style="font-size: 1.38rem; margin-bottom: 14px"
+              style="font-size: 1.32rem; margin-bottom: 14px"
             >
               &#127919; Core Project Objectives
             </div>
@@ -1241,44 +1241,38 @@
               style="
                 display: flex;
                 flex-direction: column;
-                gap: 14px;
-                font-size: 1.18rem;
-                line-height: 1.68;
+                gap: 12px;
+                font-size: 1.12rem;
+                line-height: 1.55;
+                padding-left: 20px;
               "
             >
               <li>
-                <strong>Continuous Auditing:</strong> Replace quarterly static
-                PDFs with automated, recurring network scans.
+                <strong>Continuous Scanning:</strong> Automated recurring sweeps replacing static PDF reports.
               </li>
               <li>
-                <strong>Threat Feed Sync:</strong> Automated daily ingestion of
-                ~85,000+ Community NVTs, CVEs, and SCAP feeds.
+                <strong>Threat Feed Sync:</strong> Daily automated sync of 85,000+ NVTs &amp; SCAP feeds.
               </li>
               <li>
-                <strong>DevSecOps Integration:</strong> Bridge native OpenVAS
-                active scanning with containerized DefectDojo ASPM.
+                <strong>Pipeline Bridge:</strong> Native OpenVAS telemetry linked directly to DefectDojo.
               </li>
               <li>
-                <strong>Cryptographic Deduplication:</strong> Deterministic
-                SHA-256 signatures to eliminate duplicate findings.
+                <strong>Deduplication:</strong> Deterministic hashing eliminating recurring alert fatigue.
               </li>
               <li>
-                <strong>SLA Policy Enforcement:</strong> Real-time remediation
-                countdown timers (Critical: 7d, High: 30d, Medium: 60d).
+                <strong>SLA Governance:</strong> Real-time countdowns (Critical 7d, High 30d, Med 60d).
               </li>
               <li>
-                <strong>Auto-Retest Verification:</strong> Automatically
-                transition fixed flaws from <code>Active</code> to
-                <code>Mitigated</code> on rescan.
+                <strong>Retest Verification:</strong> Auto-transitions fixed flaws to <code>Mitigated</code> on rescan.
               </li>
             </ul>
           </div>
 
           <!-- Column 2: System Requirements & Platform Stack -->
-          <div class="card highlight-purple" style="padding: 24px 28px">
+          <div class="card highlight-purple" style="padding: 20px 24px">
             <div
               class="card-title"
-              style="font-size: 1.38rem; margin-bottom: 14px"
+              style="font-size: 1.32rem; margin-bottom: 14px"
             >
               &#9881; System Requirements &amp; Platform Stack
             </div>
@@ -1286,40 +1280,35 @@
               style="
                 display: flex;
                 flex-direction: column;
-                gap: 14px;
-                font-size: 1.18rem;
-                line-height: 1.68;
+                gap: 12px;
+                font-size: 1.12rem;
+                line-height: 1.55;
+                padding-left: 20px;
               "
             >
               <li>
                 <strong>Host OS:</strong>
-                <code>Kali Linux 2026.2</code> (hardened kernel &amp; raw socket
-                support).
+                <code>Kali Linux 2026.2</code> (Raw socket access, zero rate limits).
               </li>
               <li>
-                <strong>Scanner Engine:</strong>
-                <code>Greenbone OpenVAS (GVM)</code> running natively via UNIX
-                socket.
+                <strong>Scanner:</strong>
+                <code>Greenbone OpenVAS</code> (Native UNIX socket <code>/run/ospd</code>).
               </li>
               <li>
-                <strong>ASPM Platform:</strong>
-                <code>OWASP DefectDojo v3.4.101</code> (containerized Docker
-                microservices).
+                <strong>Management Plane:</strong>
+                <code>OWASP DefectDojo v3.4.101</code> (Docker microservices).
               </li>
               <li>
-                <strong>Target System:</strong>
-                <code>Target Lab Server</code> at
-                <code>10.0.2.15</code> (isolated host-only subnet).
+                <strong>Target Asset:</strong>
+                <code>Target Lab Server</code> at <code>10.0.2.15</code> (Host-only subnet).
               </li>
               <li>
-                <strong>Compute &amp; RAM:</strong>
-                <code>4–8 vCPUs</code> &bull; <code>8–16 GB RAM</code> (for NVT
-                checks &amp; Celery workers).
+                <strong>Compute:</strong>
+                <code>4–8 vCPUs</code> &bull; <code>8–16 GB RAM</code> (Feed cache &amp; Celery).
               </li>
               <li>
                 <strong>Storage &amp; Network:</strong>
-                <code>50 GB+ NVMe SSD</code> &bull; Host-Only adapter (zero
-                virtual NAT latency).
+                <code>50 GB+ NVMe</code> &bull; Virtual switch (Zero NAT packet drop).
               </li>
             </ul>
           </div>
@@ -1352,7 +1341,7 @@
         </div>
         <div class="diagram-container">
           <svg
-            viewBox="0 0 1000 320"
+            viewBox="0 0 1000 430"
             width="100%"
             height="auto"
             xmlns="http://www.w3.org/2000/svg"
@@ -1398,7 +1387,7 @@
               x="10"
               y="10"
               width="980"
-              height="300"
+              height="410"
               rx="14"
               fill="#0f172a"
               stroke="#334155"
@@ -1406,9 +1395,9 @@
             />
             <text
               x="30"
-              y="38"
+              y="44"
               fill="#38bdf8"
-              font-size="16"
+              font-size="17"
               font-weight="bold"
               font-family="monospace"
             >
@@ -1417,49 +1406,49 @@
 
             <!-- Component 1: Threat Feeds -->
             <rect
-              x="35"
-              y="65"
-              width="180"
-              height="215"
+              x="30"
+              y="68"
+              width="195"
+              height="332"
               rx="10"
               fill="#1e293b"
               stroke="#06b6d4"
               stroke-width="2"
             />
             <text
-              x="50"
-              y="95"
+              x="45"
+              y="105"
               fill="#f8fafc"
-              font-size="15"
+              font-size="16.5"
               font-weight="bold"
             >
               Community Threat Feeds
             </text>
-            <text x="50" y="125" fill="#94a3b8" font-size="13">
+            <text x="45" y="146" fill="#94a3b8" font-size="14.5">
               &bull; NVT (NASL Tests)
             </text>
-            <text x="50" y="150" fill="#94a3b8" font-size="13">
+            <text x="45" y="180" fill="#94a3b8" font-size="14.5">
               &bull; SCAP (CVE / CPE)
             </text>
-            <text x="50" y="175" fill="#94a3b8" font-size="13">
+            <text x="45" y="214" fill="#94a3b8" font-size="14.5">
               &bull; CERT Advisories
             </text>
-            <text x="50" y="200" fill="#94a3b8" font-size="13">
+            <text x="45" y="248" fill="#94a3b8" font-size="14.5">
               &bull; GVMD_DATA Objects
             </text>
             <rect
-              x="50"
-              y="225"
-              width="150"
-              height="35"
-              rx="6"
+              x="45"
+              y="332"
+              width="165"
+              height="46"
+              rx="8"
               fill="#0284c7"
             />
             <text
-              x="65"
-              y="247"
+              x="54"
+              y="361"
               fill="#ffffff"
-              font-size="12"
+              font-size="13.5"
               font-weight="bold"
             >
               greenbone-feed-sync
@@ -1467,65 +1456,76 @@
 
             <!-- Arrow 1 to 2 -->
             <path
-              d="M 215 172 L 265 172"
+              d="M 225 234 L 265 234"
               stroke="#06b6d4"
-              stroke-width="3"
+              stroke-width="3.5"
               marker-end="url(#arrow)"
             />
 
             <!-- Component 2: Native OpenVAS -->
             <rect
-              x="270"
-              y="65"
-              width="220"
-              height="215"
+              x="265"
+              y="68"
+              width="235"
+              height="332"
               rx="10"
               fill="#1e293b"
               stroke="#10b981"
               stroke-width="2"
             />
             <text
-              x="285"
-              y="95"
+              x="280"
+              y="105"
               fill="#f8fafc"
-              font-size="15"
+              font-size="16.5"
               font-weight="bold"
             >
               Greenbone GVM Daemons
             </text>
-            <text x="285" y="120" fill="#94a3b8" font-size="13">
+            <text x="280" y="144" fill="#94a3b8" font-size="14.5">
               &bull; gvmd (Manager Daemon)
             </text>
-            <text x="285" y="140" fill="#94a3b8" font-size="13">
+            <text x="280" y="172" fill="#94a3b8" font-size="14.5">
               &bull; PostgreSQL (Schema Cache)
             </text>
-            <text x="285" y="160" fill="#94a3b8" font-size="13">
+            <text x="280" y="200" fill="#94a3b8" font-size="14.5">
               &bull; ospd-openvas (Scanner)
             </text>
             <rect
-              x="285"
-              y="180"
-              width="190"
-              height="40"
-              rx="6"
+              x="276"
+              y="226"
+              width="212"
+              height="46"
+              rx="7"
               fill="#064e3b"
               stroke="#10b981"
-              stroke-width="1"
+              stroke-width="1.5"
             />
             <text
-              x="295"
-              y="205"
+              x="284"
+              y="255"
               fill="#6ee7b7"
-              font-size="12"
+              font-size="12.5"
               font-family="monospace"
+              font-weight="bold"
             >
               /run/ospd/ospd-openvas.sock
             </text>
+            <rect
+              x="282"
+              y="332"
+              width="200"
+              height="46"
+              rx="8"
+              fill="#064e3b"
+              stroke="#34d399"
+              stroke-width="1.5"
+            />
             <text
-              x="285"
-              y="250"
-              fill="#e2e8f0"
-              font-size="13"
+              x="306"
+              y="361"
+              fill="#34d399"
+              font-size="15"
               font-weight="bold"
             >
               Target IP: 10.0.2.15
@@ -1533,98 +1533,118 @@
 
             <!-- Arrow 2 to 3 -->
             <path
-              d="M 490 172 L 540 172"
+              d="M 500 234 L 538 234"
               stroke="#10b981"
-              stroke-width="3"
+              stroke-width="3.5"
               marker-end="url(#arrow-green)"
             />
 
             <!-- Component 3: XML Artifact -->
             <rect
-              x="545"
-              y="120"
-              width="130"
-              height="100"
-              rx="8"
+              x="538"
+              y="152"
+              width="144"
+              height="164"
+              rx="10"
               fill="#334155"
               stroke="#f59e0b"
-              stroke-width="2"
+              stroke-width="2.5"
             />
             <text
-              x="555"
-              y="150"
+              x="552"
+              y="188"
               fill="#fbbf24"
-              font-size="14"
+              font-size="16"
               font-weight="bold"
             >
               Exported Scan
             </text>
             <text
-              x="555"
-              y="175"
+              x="552"
+              y="220"
               fill="#ffffff"
-              font-size="12"
+              font-size="14"
               font-family="monospace"
+              font-weight="bold"
             >
               OpenVAS XML
             </text>
-            <text x="555" y="195" fill="#94a3b8" font-size="11">
+            <text x="552" y="248" fill="#94a3b8" font-size="13">
               CVSS, OID, Ports
+            </text>
+            <rect
+              x="550"
+              y="268"
+              width="120"
+              height="28"
+              rx="6"
+              fill="#78350f"
+              stroke="#f59e0b"
+              stroke-width="1.2"
+            />
+            <text
+              x="562"
+              y="287"
+              fill="#fde68a"
+              font-size="12"
+              font-weight="bold"
+            >
+              Raw Telemetry
             </text>
 
             <!-- Arrow 3 to 4 -->
             <path
-              d="M 675 172 L 725 172"
+              d="M 682 234 L 720 234"
               stroke="#f59e0b"
-              stroke-width="3"
+              stroke-width="3.5"
               marker-end="url(#arrow-amber)"
             />
 
             <!-- Component 4: Dockerized DefectDojo -->
             <rect
-              x="730"
-              y="65"
-              width="240"
-              height="215"
+              x="720"
+              y="68"
+              width="250"
+              height="332"
               rx="10"
               fill="#1e293b"
               stroke="#8b5cf6"
               stroke-width="2"
             />
             <text
-              x="745"
-              y="95"
+              x="735"
+              y="105"
               fill="#f8fafc"
-              font-size="15"
+              font-size="16.5"
               font-weight="bold"
             >
               OWASP DefectDojo (Docker)
             </text>
-            <text x="745" y="120" fill="#94a3b8" font-size="13">
+            <text x="735" y="144" fill="#94a3b8" font-size="14.5">
               &bull; Org: Internal Infrastructure
             </text>
-            <text x="745" y="140" fill="#94a3b8" font-size="13">
+            <text x="735" y="172" fill="#94a3b8" font-size="14.5">
               &bull; Asset: Target Lab Server
             </text>
-            <text x="745" y="160" fill="#94a3b8" font-size="13">
+            <text x="735" y="200" fill="#94a3b8" font-size="14.5">
               &bull; OpenVAS XML Parser
             </text>
-            <text x="745" y="180" fill="#94a3b8" font-size="13">
+            <text x="735" y="228" fill="#94a3b8" font-size="14.5">
               &bull; Hash Deduplication Engine
             </text>
             <rect
-              x="745"
-              y="205"
-              width="210"
-              height="35"
-              rx="6"
+              x="733"
+              y="332"
+              width="224"
+              height="46"
+              rx="8"
               fill="#4c1d95"
             />
             <text
-              x="760"
-              y="227"
+              x="747"
+              y="361"
               fill="#ddd6fe"
-              font-size="12"
+              font-size="13.5"
               font-weight="bold"
             >
               SLA Timers &amp; Retest Closure
